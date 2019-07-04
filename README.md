@@ -4,17 +4,17 @@
 
 <a href="http://fljsbook.com"><img src="manuscript/images/marketing/front-cover-small.png" width="25%" align="right" hspace="20" vspace="20" title="Functional-Light JavaScript" alt="Book Cover"></a>
 
-这是一本比较相对中稳，务实的去看待JS的函数式编程基础的书籍。第一版现在已完成。可免费在线阅读, or:
+这是一本比较相对中稳，务实的去看待JS的函数式编程基础的书籍。第一版现在已完成。可免费在线阅读, 如果喜欢书籍可从以下渠道购买:
 
 <p align="center">
     <a href="http://fljsbook.com"><img src="https://img.shields.io/badge/Buy-Leanpub-yellow.svg" title="Buy on Leanpub" alt="Buy on Leanpub"></a> <a href="http://manning.fljsbook.com"><img src="https://img.shields.io/badge/Buy-Manning-yellow.svg" title="Buy on Manning" alt="Buy on Manning"></a> <a href="http://amazon.fljsbook.com"><img src="https://img.shields.io/badge/Buy-Amazon-yellow.svg" title="Buy on Amazon" alt="Buy on Amazon"></a>
 </p>
 
-"Functional-Light JavaScript" explores the core principles of functional programming (FP) as they are applied to JavaScript. But what makes this book different is that we approach these principles without drowning in all the heavy terminology. We look at a subset of FP foundational concepts that I call "Functional-Light Programming" (FLP) and apply it to JavaScript.
+本书主要探讨了应用于javascript的JS的函数式编程的核心原则。但让这本书与众不同的是，我们在处理这些原则时，没有沉溺于上面的繁重的术语中。我们研究了JS的函数式编程基本概念的一个子集，我把他称之为“多彩迷幻的 JavaScript”的函数式编程基础，并将它应用到javascript中去。
 
-**Note:** Despite the word "Light" in the title, I do not consider or recommend this book as a "beginner", "easy", or "intro" book on the topic. This book is rigorous and full of gritty detail; it expects a solid foundation of JS knowledge before diving in. "Light" means limited in scope; instead of being more broad, this book goes much deeper into each topic than you typically find in other FP-JavaScript books.
+**注意:** 尽管书名中含有“光”这个字眼，但我并不推荐把这本书归类到作为“初学者入门”或“记帐式”的那一类主题书中去。本书严谨严谨，内容翔实，在阅读深入之前，需要有扎实的JS知识基础。“灯”的意思是范围有限；这本书对每个主题的理解要比在其他常见的书写函数式编程的JS书籍深入得多，而不是更广泛。
 
-Let's face it: unless you're already a member of the FP cool kids club (I'm not!), a statement like, "a monad is just a monoid in the category of endofunctors", just doesn't mean anything useful to us.
+让我们看看现实中是怎么写的吧：“一个单元只是内函数类中的一个单位半群（又名:幺半群）”，这句话对我们来说是没有任何帮助的，除非你已经是基础函数中酷孩子俱乐部的成员（可惜我不是！）。
 
 That's not to say the terms are meaning*less* or that FPrs are bad for using them. Once you graduate from Functional-Light, you'll maybe/hopefully want to study FP more formally, and you'll certainly have plenty of exposure to what they mean and why.
 
