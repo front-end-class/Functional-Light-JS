@@ -4,7 +4,7 @@
 
 <a href="http://fljsbook.com"><img src="manuscript/images/marketing/front-cover-small.png" width="25%" align="right" hspace="20" vspace="20" title="Functional-Light JavaScript" alt="Book Cover"></a>
 
-This book is a balanced, pragmatic look at FP in JavaScript. The first edition is now complete. Read here online **for free**, or:
+这是一本比较相对中稳，务实的去看待JS的函数式编程基础的书籍。第一版现在已完成。可免费在线阅读, or:
 
 <p align="center">
     <a href="http://fljsbook.com"><img src="https://img.shields.io/badge/Buy-Leanpub-yellow.svg" title="Buy on Leanpub" alt="Buy on Leanpub"></a> <a href="http://manning.fljsbook.com"><img src="https://img.shields.io/badge/Buy-Manning-yellow.svg" title="Buy on Manning" alt="Buy on Manning"></a> <a href="http://amazon.fljsbook.com"><img src="https://img.shields.io/badge/Buy-Amazon-yellow.svg" title="Buy on Amazon" alt="Buy on Amazon"></a>
