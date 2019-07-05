@@ -18,7 +18,7 @@
 
 上面这并不是说这些术语没有意义，或者说函数式程序设计的理念不适用于他们。一旦你掌握了JavaScript中的轻量函数式编程，你可能会希望能更正式地学习函数式的程序设计（FP），你肯定会接触到它们的含义和其中的原因。
 
-But I want you to be able to apply some of the fundamentals of FP to your JavaScript *now*, because I believe it will help you write better, more *reason*able code.
+但我希望您现在能够将函数式程序设计（fp）的一些基本原理应用到您的javascript中，因为我相信它将帮助您编写更好、更合理的代码。
 
 **To read more about the motivations and perspective behind this book, check out the [Preface](manuscript/preface.md).**
 
