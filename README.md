@@ -26,8 +26,8 @@
 
 [目录](manuscript/README.md/#table-of-contents)
 
-* [Foreword](manuscript/foreword.md/#foreword) (by [Brian Lonsdorf, aka "Prof Frisby"](https://twitter.com/DrBoolean))
-* [Preface](manuscript/preface.md/#preface)
+* [序言](manuscript/foreword.md/#foreword) ([Brian Lonsdorf, aka "Prof Frisby"](https://twitter.com/DrBoolean))
+* [前言](manuscript/preface.md/#preface)
 * [Chapter 1: Why Functional Programming?](manuscript/ch1.md/#chapter-1-why-functional-programming)
 * [Chapter 2: The Nature Of Functions](manuscript/ch2.md/#chapter-2-the-nature-of-functions)
 * [Chapter 3: Managing Function Inputs](manuscript/ch3.md/#chapter-3-managing-function-inputs)
