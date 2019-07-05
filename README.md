@@ -20,7 +20,7 @@
 
 但我希望您现在能够将函数式程序设计（fp）的一些基本原理应用到您的javascript中，因为我相信它将帮助您编写更好、更合理的代码。
 
-**To read more about the motivations and perspective behind this book, check out the [Preface](manuscript/preface.md).**
+**要更多地了解这本书背后的动机和观点，请看[序言](manuscript/preface.md)。 **
 
 ## Book
 
