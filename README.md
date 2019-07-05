@@ -22,9 +22,9 @@
 
 **要更多地了解这本书背后的动机和观点，请看[序言](manuscript/preface.md)。 **
 
-## Book
+## 书籍
 
-[Table of Contents](manuscript/README.md/#table-of-contents)
+[目录](manuscript/README.md/#table-of-contents)
 
 * [Foreword](manuscript/foreword.md/#foreword) (by [Brian Lonsdorf, aka "Prof Frisby"](https://twitter.com/DrBoolean))
 * [Preface](manuscript/preface.md/#preface)
