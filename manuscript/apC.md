@@ -1,23 +1,22 @@
-# Functional-Light JavaScript
-# Appendix C: FP Libraries
+# JavaScript中的轻量函数式编程
+# 附录C: 关于FP的库  
+当你把这本书从头读到尾，请花点时间回看一下[Chapter 1](ch1.md). 这是一段很长的旅程. 我希望你已经学到了很多，并且把函数式的精髓深入到你的编程中去。  
 
-If you've been reading this book from start to finish, take a minute to stop and look back how far you've come since [Chapter 1](ch1.md). It's been quite a journey. I hope you've learned a lot and gained insight into thinking functionally for your own programs.
+我想把这本书合上来告诉你一些常用/流行的FP库的快速入门。接下来要介绍并不是一份详尽的文档，而是一个快速使你从轻量函数式进入更广泛的FP的入门介绍。  
 
-I want to close this book leaving you with some quick pointers of working with common/popular FP libraries. This is not an exhaustive documentation on each, but a quick glance at the things you should be aware of as you venture beyond "Functional-Light" into broader FP.
-
-Wherever possible, I recommend you *not* reinvent any wheels. If you find an FP library that suits your needs, use it. Only use the ad hoc helper utilities from this book -- or invent ones of your own! -- if you can't find a suitable library method for your circumstance.
+如果可能的话，我建议你 “不要” 再发明任何轮子。如果你找到一个符合你需要的FP库，就用它吧。-- 如果你实在找不到适合自己库，那么也使用本书中的示例程序 -- 或者你也可以自己发明一个。  
 
 ## Stuff to Investigate
 
-Let's expand the [list of FP libraries to be aware of, from Chapter 1](ch1.md/#libraries). We won't cover all of these (as there's a lot of overlap), but here are the ones that should probably be on your radar screen:
+让我们展开第1章 [list of FP libraries to be aware of, from Chapter 1](ch1.md/#libraries)，我们不可能涵盖所有这些内容（可能有很多相似），但以下应该是你要关注的库：  
 
-* [Ramda](http://ramdajs.com): General FP Utilities
-* [Sanctuary](https://github.com/sanctuary-js/sanctuary): Ramda Companion for FP Types
-* [lodash/fp](https://github.com/lodash/lodash/wiki/FP-Guide): General FP Utilities
-* [functional.js](http://functionaljs.com/): General FP Utilities
-* [Immutable](https://github.com/facebook/immutable-js): Immutable Data Structures
-* [Mori](https://github.com/swannodette/mori): (ClojureScript Inspired) Immutable Data Structures
-* [Seamless-Immutable](https://github.com/rtfeldman/seamless-immutable): Immutable Data Helpers
+* [Ramda](http://ramdajs.com): 通用的FP工具库
+* [Sanctuary](https://github.com/sanctuary-js/sanctuary): 类似Ramda的FP工具库
+* [lodash/fp](https://github.com/lodash/lodash/wiki/FP-Guide): lodash的FP工具库
+* [functional.js](http://functionaljs.com/): 通用的FP工具库
+* [Immutable](https://github.com/facebook/immutable-js): facebook官方的，一个关于不可变数据工具库
+* [Mori](https://github.com/swannodette/mori): 基于ClojureScript不可变数据工具库
+* [Seamless-Immutable](https://github.com/rtfeldman/seamless-immutable): 关于不可变数据的辅助函数
 * [transducers-js](https://github.com/cognitect-labs/transducers-js): Transducers
 * [monet.js](https://github.com/monet/monet.js): Monadic Types
 
