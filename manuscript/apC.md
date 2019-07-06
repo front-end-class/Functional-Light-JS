@@ -1,38 +1,38 @@
-# JavaScript中的轻量函数式编程
-# 附录C: 关于FP的库  
-当你把这本书从头读到尾，请花点时间回看一下[Chapter 1](ch1.md). 这是一段很长的旅程. 我希望你已经学到了很多，并且把函数式的精髓深入到你的编程中去。  
+# JavaScript轻量级函数式编程
+# 附录C: 关于FP的库
+当你把这本书从头读到尾，请花点时间回看一下[Chapter 1](ch1.md). 这是一段很长的旅程. 我希望你已经学到了很多，并且把函数式的精髓深入到你的编程中去。
 
-我想把这本书合上来告诉你一些常用/流行的FP库的快速入门。接下来要介绍并不是一份详尽的文档，而是一个快速使你从轻量函数式进入更广泛的FP的入门介绍。  
+我想把这本书合上来告诉你一些常用/流行的FP库的快速入门。接下来要介绍并不是一份详尽的文档，而是一个快速使你从轻量函数式进入更广泛的FP的入门介绍。
 
-如果可能的话，我建议你 “不要” 再发明任何轮子。如果你找到一个符合你需要的FP库，就用它吧。-- 如果你实在找不到适合自己库，那么也使用本书中的示例程序 -- 或者你也可以自己发明一个。  
+如果可能的话，我建议你 “不要” 再发明任何轮子。如果你找到一个符合你需要的FP库，就用它吧。-- 如果你实在找不到适合自己库，那么也使用本书中的示例程序 -- 或者你也可以自己发明一个。
 
-## Stuff to Investigate
+## 需关注的工具库（注：我的理解）
 
-让我们展开第1章 [list of FP libraries to be aware of, from Chapter 1](ch1.md/#libraries)，我们不可能涵盖所有这些内容（可能有很多相似），但以下应该是你要关注的库：  
+让我们展开第1章 [list of FP libraries to be aware of, from Chapter 1](ch1.md/#libraries)，我们不可能涵盖所有这些内容（可能有很多相似），但以下应该是你要关注的库：
 
 * [Ramda](http://ramdajs.com): 通用的FP工具库
 * [Sanctuary](https://github.com/sanctuary-js/sanctuary): 类似Ramda的FP工具库
 * [lodash/fp](https://github.com/lodash/lodash/wiki/FP-Guide): lodash的FP工具库
 * [functional.js](http://functionaljs.com/): 通用的FP工具库
-* [Immutable](https://github.com/facebook/immutable-js): facebook官方的，一个关于不可变数据工具库
-* [Mori](https://github.com/swannodette/mori): 基于ClojureScript不可变数据工具库
+* [Immutable](https://github.com/facebook/immutable-js): facebook官方的，一个关于不可变数据的库
+* [Mori](https://github.com/swannodette/mori): 基于ClojureScript不可变数据的库
 * [Seamless-Immutable](https://github.com/rtfeldman/seamless-immutable): 关于不可变数据的辅助函数
 * [transducers-js](https://github.com/cognitect-labs/transducers-js): Transducers
 * [monet.js](https://github.com/monet/monet.js): Monadic Types
 
-There are dozens of other fine libraries not on this list. Just because it's not on my list here doesn't mean it's not good, nor is this list a particular endorsement. It's just a quick glance at the landscape of FP-in-JavaScript. A much longer list of FP resources can be [found here](https://github.com/stoeffel/awesome-fp-js).
+还有几十个其他优秀的库不在此列表中。仅仅因为它不在我的名单上并不意味着它不好，这里只是简单地浏览一下JavaScript中的FP。你可以[在这里](https://github.com/stoeffel/awesome-fp-js)找到更多关于FP的编程资源。
 
-One resource that's extremely important to the FP world -- it's not a library but more an encyclopedia! -- is [Fantasy Land](https://github.com/fantasyland/fantasy-land) (aka FL).
+函数式编程世界中十分重要的学习资源，[Fantasy Land](https://github.com/fantasyland/fantasy-land) (aka FL) ，与其说它是一个库，更像是一本百科全书。
 
-This is definitely not light reading for the faint of heart. It's a complete detailed roadmap of all of FP as it's interpreted in JavaScript. FL has become a de facto standard for JavaScript FP libraries to adhere to, to ensure maximum interoperability.
+Fantasy Land（FL） 不仅仅是一份为初学者准备的轻量级读物，更是一个完整而详细的 JavaScript 函数式编程路线图。为了确保最大的通用性，FL 已经成为 JavaScript 函数式编程库遵循的业内标准。
 
-Fantasy Land is pretty much the exact opposite of "Functional-Light". It's the full-on no-holds-barred approach to FP in JavaScript. That said, as you venture beyond this book, it's likely that FL will be on that road for you. I'd recommend you bookmark it, and go back to it after you've had at least six months of real-world practice with this book's concepts.
+Fantasy Land （FL）与“轻量函数式编程”的概念几乎完全相反，它是 JavaScript 函数式编程世界中全面的毫无保留的一种诠释 。也就是说，当你的能力超越本书时，FL 将会成为你接下来前进的方向。我建议你将其保存在收藏夹，并在你使用本书的概念进行至少 6 个月的实战练习之后再回来。
 
-## Ramda (0.23.0)
+## Ramda (0.23.0) （注：目前最新版本是0.26.1）
 
-From the [Ramda documentation](http://ramdajs.com/):
+来自 [Ramda documentation](http://ramdajs.com/):
 
-> Ramda functions are automatically curried.
+> Ramda函数是自动被柯里化的.
 >
 > The parameters to Ramda functions are arranged to make it convenient for currying. The data to be operated on is generally supplied last.
 
