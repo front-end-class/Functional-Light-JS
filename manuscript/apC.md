@@ -34,11 +34,11 @@ Fantasy Land （FL）与“轻量函数式编程”的概念几乎完全相反�
 
 > Ramda函数是自动被柯里化的.
 >
-> The parameters to Ramda functions are arranged to make it convenient for currying. The data to be operated on is generally supplied last.
+> Ramda函数的参数进行了优化，使其便于柯里化。要操作的数据通常是最后提供的。
 
-I find that design decision to be one of Ramda's strengths. It's also important to note that Ramda's form of currying (as with most libraries, it seems) is the ["loose currying" we talked about in Chapter 3](ch3.md/#user-content-loosecurry).
+我发现合理设计是Ramda的优势之一。还需要注意的是，Ramda的柯里化形式(似乎与大多数库一样)是 [我们第3章讨论的“松散柯里化”](ch3.md/#user-content-loosecurry)。
 
-The [final example of Chapter 3](ch3.md/#user-content-finalshortlong) -- recall defining a point-free `printIf(..)` utility -- can be done with Ramda like this:
+回想一下，[在第3章最后的示例](ch3.md/#user-content-finalshortlong)，我们定义一个无点函数`printif(..) ` -- 在Ramda中可以这样定义：
 
 ```js
 function output(msg) {
@@ -63,23 +63,23 @@ printIf( isLongEnough, msg1 );
 printIf( isLongEnough, msg2 );            // Hello World
 ```
 
-A few differences to point out compared to [Chapter 3's approach](ch3.md/#user-content-finalshortlong):
+与第3章实现有点不同的是 [Chapter 3's approach](ch3.md/#user-content-finalshortlong)：
 
-* We use `R.complement(..)` instead of `not(..)` to create a negating function `isLongEnough(..)` around `isShortEnough(..)`.
+* 我们使用 `R.complement(..)` 代替 `not(..)` 基于`isShortEnough(..)` 创建一个相反的否定函数 `isLongEnough(..)` 。
 
-* We use `R.flip(..)` instead of `reverseArgs(..)`. It's important to note that `R.flip(..)` only swaps the first two arguments, whereas `reverseArgs(..)` reverses all of them. In this case, `flip(..)` is more convenient for us, so we don't need to do `partialRight(..)` or any of that kind of juggling.
+* 我们使用 `R.flip(..)` 代替 `reverseArgs(..)`。需要注意的是，`R.flip(..)`只交换前两个参数，而`recseArgs(..)`则反转所有参数。在这种情况下，`flip(..)`对我们来说更方便，所以我们不需要使用`ParalRight(..)`或其他的方法。
 
-* `R.partial(..)` takes all of its subsequent arguments (beyond the function) as a single array.
+* `R.partial(..)`将其所有后续参数(函数以外)作为单个数组传入。
 
-* Because Ramda is using loose currying, we don't need to use `R.uncurryN(..)` to get a `printIf(..)` that takes both its arguments. If we did, it would look like `R.uncurryN( 2, .. )` wrapped around the `R.partial(..)` call; but that's not necessary.
+* 由于Ramda 使用松散柯里化，因此我们不需要使用 `R.uncurryN(..)` 来取得一个所有参数的 `printIf(..)` 方法。如果我们这样做了，它看起来就像用 `R.uncurryN( 2,.. )` 包装了 `R.partial(..)` 来调用，这看似是没必要的。
 
-Ramda is a very popular and powerful library. It's a really good place to start if you're practicing adding FP to your code base.
+Ramda 是一个非常受欢迎和强大的函数库。如果您正在尝试将FP添加到您的代码库中，那么这是一个非常好的开始。
 
 ## Lodash/fp (4.17.4)
 
-Lodash is one of the most popular libraries in the entire JS ecosystem. They publish an "FP-friendly" version of their API as ["lodash/fp"](https://github.com/lodash/lodash/wiki/FP-Guide).
+Lodash 是整个JS生态系统中最受欢迎的函数库。Lodash团队也发布了一个 "FP-friendly" API版本 -- ["lodash/fp"](https://github.com/lodash/lodash/wiki/FP-Guide)。
 
-In [Chapter 9, we looked at composing standalone list operations](ch9.md/#composing-standalone-utilities) (`map(..)`, `filter(..)`, and `reduce(..)`). Here's how we could do it with "lodash/fp":
+在 [第9章，我们探讨了合并独立列表操作](ch9.md/#composing-standalone-utilities) (`map(..)`, `filter(..)`, 和 `reduce(..)`)。在"lodash/fp"中，我们可以这么做 :
 
 ```js
 var sum = (x,y) => x + y;
@@ -94,7 +94,7 @@ fp.compose( [
 ( [1,2,3,4,5] );                    // 18
 ```
 
-Instead of the more familiar `_.` namespace prefix, "lodash/fp" defines its methods with `fp.` as the namespace prefix. I find that a helpful distinguisher, and also generally more easy on my eyes than `_.` anyway!
+与我们熟悉的 `_.` 命名空间前缀不同，“lodash/fp”以 `fp.` 作为命名空间前缀定义其方法。我觉得这是个很有帮助的区别，而且比 `_.` 更容易理解！
 
 Notice that `fp.compose(..)` (also known as `_.flowRight(..)` in lodash proper) takes an array of functions instead of individual arguments.
 
