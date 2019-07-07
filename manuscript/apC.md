@@ -22,7 +22,7 @@
 
 还有几十个其他优秀的库不在此列表中。仅仅因为它不在我的名单上并不意味着它不好，这里只是简单地浏览一下JavaScript中的FP。你可以[在这里](https://github.com/stoeffel/awesome-fp-js)找到更多关于FP的编程资源。
 
-函数式编程世界中十分重要的学习资源，[Fantasy Land](https://github.com/fantasyland/fantasy-land) (aka FL) ，与其说它是一个库，更像是一本百科全书。
+函数式编程世界中十分重要的学习资源，[Fantasy Land](https://github.com/fantasyland/fantasy-land) (简称 FL) ，与其说它是一个库，更像是一本百科全书。
 
 Fantasy Land（FL） 不仅仅是一份为初学者准备的轻量级读物，更是一个完整而详细的 JavaScript 函数式编程路线图。为了确保最大的通用性，FL 已经成为 JavaScript 函数式编程库遵循的业内标准。
 
@@ -34,7 +34,7 @@ Fantasy Land （FL）与“轻量函数式编程”的概念几乎完全相反�
 
 > Ramda函数是自动被柯里化的.
 >
-> Ramda函数的参数进行了优化，使其便于柯里化。要操作的数据通常是最后提供的。
+> Ramda函数的参数进行了优化，使其便于柯里化。要操作的数据通常跟在最后。
 
 我发现合理设计是Ramda的优势之一。还需要注意的是，Ramda的柯里化形式(似乎与大多数库一样)是 [我们第3章讨论的“松散柯里化”](ch3.md/#user-content-loosecurry)。
 
@@ -65,7 +65,7 @@ printIf( isLongEnough, msg2 );            // Hello World
 
 与第3章实现有点不同的是 [Chapter 3's approach](ch3.md/#user-content-finalshortlong)：
 
-* 我们使用 `R.complement(..)` 代替 `not(..)` 基于`isShortEnough(..)` 创建一个相反的否定函数 `isLongEnough(..)` 。
+* 我们使用 `R.complement(..)` 代替 `not(..)` 基于`isShortEnough(..)` 创建一个相反函数 `isLongEnough(..)` 。
 
 * 我们使用 `R.flip(..)` 代替 `reverseArgs(..)`。需要注意的是，`R.flip(..)`只交换前两个参数，而`recseArgs(..)`则反转所有参数。在这种情况下，`flip(..)`对我们来说更方便，所以我们不需要使用`ParalRight(..)`或其他的方法。
 
