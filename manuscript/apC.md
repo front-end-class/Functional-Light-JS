@@ -216,12 +216,12 @@ FPO.std.reduce(
 ## 干货 #2: fasy
 
 FP迭代方法（`map(..)`，`filter(..)`等）几乎总是被看作同步操作，意味着立即执行所有步骤。 事实上，其他FP模式，如合成甚至转换也是迭代，并且也以这种方式执行。
+		
+但是如果迭代中的一个或多个步骤需要异步完成，会发生什么？自然你会想到观察者模式（见[第10章]（ch10.md/#observables）），但目前不是我们所要的。
 
-But what happens if one or more of the steps in an iteration needs to complete asynchronously? You might jump to thinking that Observables (see [Chapter 10](ch10.md/#observables)) is the natural answer, but they're not what we need.
+让我快速说明一下。
 
-Let me quickly illustrate.
-
-Imagine you have a list of URLs that represent images you want to load into a web page. The fetching of the images is asynchronous, obviously. So, this isn't going to work quite like you'd hope:
+想象一下，您有一个URL列表，表示您要加载到网页中的图像。 显然，提取图像是异步的。显然，这并不像你希望的那样顺序加载：
 
 ```js
 var imageURLs = [
@@ -233,9 +233,9 @@ var imageURLs = [
 var images = imageURLs.map( fetchImage );
 ```
 
-The `images` array won't contain the images. Depending on the behavior of `fetchImage(..)`, it probably returns a promise for the image object once it finishes downloading. So `images` would now be a list of promises.
+`images` 数组的内容基于`fetchImage(..)`方法执行，一旦它下载完成将返回一个promise的对象。
 
-Of course, you could then use `Promise.all(..)` to wait for all those promises to resolve, and then unwrap an array of the image object results at its completion:
+当然，你也可以使用`Promise.all(..)` 来等待所有的图片下载完成返回一个resolve对象，通过`then()`方法返回一个接收图片对象的函数：
 
 ```js
 Promise.all( images )
@@ -244,7 +244,7 @@ Promise.all( images )
 });
 ```
 
-Unfortunately, this "trick" only works if you're going to do all the asynchronous steps concurrently (rather than serially, one after the other), and only if the operation is a `map(..)` call as shown. If you want serial asynchrony, or you want to, for example, do a `filter(..)` concurrently, this won't quite work; it's possible, but it's messier.
+不幸的是，这个“技巧”只有在你要同时执行所有异步步骤（而不是串行，一个接一个）时才有效，并且只有当操作是一个`map(..)`调用时才有效。 如果你想要串行异步操作，或者你想同事使用`filter(..)`方法，这将可能返回错乱结果。
 
 And some operations naturally require serial asynchrony, like for example an asynchronous `reduce(..)`, which clearly needs to work left-to-right one at a time; those steps can't be run concurrently and have that operation make any sense.
 
