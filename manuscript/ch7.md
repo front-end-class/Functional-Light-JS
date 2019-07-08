@@ -1,37 +1,5 @@
-# Functional-Light JavaScript
-# Chapter 7: Closure vs. Object
-
-A number of years ago, Anton van Straaten crafted what has become a rather famous and oft-cited [koan](https://www.merriam-webster.com/dictionary/koan) to illustrate and provoke an important tension between closure and objects:
-
-> The venerable master Qc Na was walking with his student, Anton. Hoping to
-prompt the master into a discussion, Anton said "Master, I have heard that
-objects are a very good thing - is this true?" Qc Na looked pityingly at
-his student and replied, "Foolish pupil - objects are merely a poor man's
-closures."
->
-> Chastised, Anton took his leave from his master and returned to his cell,
-intent on studying closures. He carefully read the entire "Lambda: The
-Ultimate..." series of papers and its cousins, and implemented a small
-Scheme interpreter with a closure-based object system. He learned much, and
-looked forward to informing his master of his progress.
->
-> On his next walk with Qc Na, Anton attempted to impress his master by
-saying "Master, I have diligently studied the matter, and now understand
-that objects are truly a poor man's closures." Qc Na responded by hitting
-Anton with his stick, saying "When will you learn? Closures are a poor man's
-object." At that moment, Anton became enlightened.
->
-> -- Anton van Straaten 6/4/2003
->
-> http://people.csail.mit.edu/gregs/ll1-discuss-archive-html/msg03277.html
-
-The original posting, while brief, has more context to the origin and motivations, and I strongly suggest you read that post to properly set your mindset for approaching this chapter.
-
-Many people I've observed read this koan smirk at its clever wit but then move on without it changing much about their thinking. However, the purpose of a koan (from the Zen Buddhist perspective) is to prod the reader into wrestling with the contradictory truths therein. So, go back and read it again. Now read it again.
-
-Which is it? Is a closure a poor man's object, or is an object a poor man's closure? Or neither? Or both? Is merely the take-away that closures and objects are in some way equivalent?
-
-And what does any of this have to do with functional programming? Pull up a chair and ponder for a while. This chapter will be an interesting detour, an excursion if you will.
+# JavaScript轻量级函数式编程
+# 第7章: 闭包和对象
 
 ## The Same Page
 
