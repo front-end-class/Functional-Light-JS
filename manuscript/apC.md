@@ -96,15 +96,15 @@ fp.compose( [
 
 与我们熟悉的 `_.` 命名空间前缀不同，“lodash/fp”以 `fp.` 作为命名空间前缀定义其方法。我觉得这是个很有帮助的区别，而且比 `_.` 更容易理解！
 
-Notice that `fp.compose(..)` (also known as `_.flowRight(..)` in lodash proper) takes an array of functions instead of individual arguments.
+需要注意的是，`fp.Composed(..)` (在lodash中称为`_.flowRight(..)`)接受一个函数数组，而不是单个函数参数。
 
-You cannot beat the stability, widespread community support, and performance of lodash. It's a solid bet for your FP explorations.
+lodash的稳定性、广泛的社区支持和优秀性能是你探索FP的后盾。
 
 ## Mori (0.3.2)
 
-In [Chapter 6](ch6.md), we already briefly glanced at the Immutable.js library, probably the most well-known for immutable data structures.
+在[第6章](ch6.md)，我们已经简要地看过 Immutable.js 库，它可能是最著名的不可变数据结构库。
 
-Let's instead look at another popular library: [Mori](https://github.com/swannodette/mori). Mori is designed with a different (ostensibly more FP-like) take on API: it uses standalone functions instead of methods directly on the values.
+让我们看看另一个流行的库：[Mori](https://github.com/swannodette/mori) 。Mori在设计时采用了一套不同的API(表面上看更像FP)：它使用独立的函数，而不是直接对值做操作。
 
 ```js
 var state = mori.vector( 1, 2, 3, 4 );
@@ -126,21 +126,21 @@ mori.get( newState, 42 );                // "meaning of life"
 mori.toJs( newState ).slice( 1, 3 );    // [2,3]
 ```
 
-Some interesting things to point out about Mori for this example:
+在这个例子中，Mori有一些有趣的地方需要指出：
 
-* We're using a `vector` instead of a `list` (as one might assume), mostly because the documentation says it behaves more like we expect JS arrays to be.
+* 我们使用 `vector` 代替 `list` ，主要是因为文档说它的行为更像JS的数组。
 
-* We cannot just randomly set a position past the end of the vector like we can with JS arrays; that throws an exception. So we have to first "grow" the vector using `mori.into(..)` with an array of the appropriate size of extra slots we want. Once we have a vector with 43 slots (4 + 39), we can set the final slot (position `42`) to the `"meaning of life"` value using the `mori.assoc(..)` method.
+* 我们不能像操作JS数组那样在末尾随机设置值，这会引发异常报错。因此，我们必须首先使用 `morio .into(..)` 传入一个合适长度的数组来扩展 vector 的长度。当有一个43个插槽（注：索引值）(4 + 39)的vector，我们就可以使用 `mori.assoc(..)`方法将最后的索引位置 `42` 设置为`"meaning of life"`这个值。 
 
-* The intermediate step of creating a larger vector with `mori.into(..)` and then creating another from it with `mori.assoc(..)` might sound inefficient. But the beauty of immutable data structures is that no cloning is going on here. Each time a "change" is made, the new data structure is just tracking the difference from the previous state.
+* 使用 `mori.into(..)` 创建一个更大的vector，然后使用 `mori.assoc(..)` 在此基础上创建另一个vector，这样的操作可能听起来效率不高。但是不可变数据结构的美妙之处在于数据没有克隆。每次进行“更改”时，新的数据结构只是跟踪与以前状态的差异。
 
-Mori is heavily inspired by ClojureScript. Its API will be very familiar if you have experience (or currently work in!) that language. Since I don't have that experience, I find the method names a little strange to get used to.
+Mori深受ClojureScript的启发。 如果你有ClojureScript语言经验（或目前正在使用！），那么应该对它的API非常熟悉。由于我没有这种经验，我觉得方法名有点奇怪，不习惯。
 
-But I really like the standalone function design instead of methods on values. Mori also has some functions that automatically return regular JS arrays, which is a nice convenience.
+我真心喜欢这种独立的调用函数设计，而不是基于值的调用方法。Mori还有一些自动返回常规JS数组的函数，用起来都很方便。
 
-## Bonus: FPO
+## 干货: FPO
 
-In [Chapter 2, we introduced a pattern](ch2.md/#named-arguments) for dealing with arguments called "named arguments", which in JS means using an object at the call-site to map properties to destructured function parameters:
+在 [第2章中，我们介绍了一种模式]（ch2.md/#named-arguments），用于处理称为“命名参数”的参数，在JS（注：ES6）中，使用对象将属性映射到析构函数的参数:
 
 ```js
 function foo( {x,y} = {} ) {
@@ -152,7 +152,7 @@ foo( {
 } );                    // undefined 3
 ```
 
-Then in [Chapter 3, we talked about extending](ch3.md/#order-matters) our ideas of currying and partial application to work with named arguments, like this:
+接着在[Chapter 3, 我们探讨了更多](ch3.md/#order-matters) 关于析构函数的柯里化和偏函数应用，像下面这样:
 
 ```js
 function foo({ x, y, z } = {}) {
@@ -164,7 +164,7 @@ var f1 = curryProps( foo, 3 );
 f1( {y: 2} )( {x: 1} )( {z: 3} );
 ```
 
-One major benefit of this style is being able to pass arguments (even with currying or partial application!) in any order without needing to do `reverseArgs(..)`-style juggling of parameters. Another is being able to omit an optional argument by simply not specifying it, instead of passing an ugly placeholder.
+这种风格的一个好处是能够以任何顺序传参（即使是柯里化和偏函数应用！），而不必像`reverseArgs(..)`式的传参。 另一个好处是能够省略一个可选参数，只不需传一个丑陋的占位符。
 
 In my journey learning FP, I've regularly been frustrated by both of those irritations of functions with traditional positional arguments; thus I've really appreciated the named arguments style for addressing those concerns.
 
