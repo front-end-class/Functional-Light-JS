@@ -166,13 +166,13 @@ f1( {y: 2} )( {x: 1} )( {z: 3} );
 
 这种风格的一个好处是能够以任何顺序传参（即使是柯里化和偏函数应用！），而不必像`reverseArgs(..)`式的传参。 另一个好处是能够省略一个可选参数，只不需传一个丑陋的占位符。
 
-In my journey learning FP, I've regularly been frustrated by both of those irritations of functions with traditional positional arguments; thus I've really appreciated the named arguments style for addressing those concerns.
+在我学习FP的过程中，我经常被固定位置传参感到沮丧，因此，我非常欣赏用命名参数风格（注：传入一个对象）解决以往的问题。
 
-One day, I was musing about with this style of FP coding, and wondered what it would be like if a whole FP library had all its API methods exposed in this style. I started experimenting, showed those experiments to a few FP folks, and got some positive feedback.
+有一天，我在思考FP编码风格，我想如果整个FP库都以这种风格公开其所有API方法，那会是什么样子。我开始做尝试，不断把这些尝试展示给一些人看，并得到了一些积极的反馈。
 
-From those experiments, eventually the [FPO](https://github.com/getify/fpo) (pronounced "eff-poh") library was born; FPO stands for FP-with-Objects, in case you were wondering.
+经过努力，[FPO](https://github.com/getify/fpo) (发音为“ef-poh”) 库最终诞生了。FPO意思是FP-with-Objects。
 
-From the documentation:
+官方文档:
 
 ```js
 // Ramda's `reduce(..)`
@@ -189,9 +189,9 @@ FPO.reduce({
 }); // 19
 ```
 
-With traditional library implementations of `reduce(..)` (like Ramda), the initial value parameter is in the middle, and not optional. FPO's `reduce(..)` method can take the arguments in any order, and you can omit the optional initial value if desired.
+例如传统FP库（Ramda）的`reduce(..)`方法，初始参数的位置是固定不可变的。而FPO的`reduce(..)`方法可以按任意顺序传参，如果需要，甚至可以省略初始值。
 
-As with most other FP libraries, FPO's API methods are automatically loose-curried, so you can not only provide arguments in any order, but specialize the function by providing its arguments over multiple calls:
+与大多数其他FP库一样，FPO的API方法自动松柯里化，因此您不仅可以按任何顺序传参，还可以通过多次调用赋值方法来传入参数：
 
 ```js
 var f = FPO.reduce({ arr: [3,7,9] });
@@ -201,7 +201,7 @@ var f = FPO.reduce({ arr: [3,7,9] });
 f({ fn: ({acc,v}) => acc + v });    // 19
 ```
 
-Lastly, all of FPO's API methods are also exposed using the traditional positional arguments style -- you'll find they're all very similar to Ramda and other libraries -- under the `FPO.std.*` namespace:
+最后，在`FPO.std.*`命名文件下，你会发现它们与Ramda和其他库非常相似，所有FPO的API方法也可以使用传统固定位置参数操作：
 
 ```js
 FPO.std.reduce(
@@ -211,11 +211,11 @@ FPO.std.reduce(
 );  // 19
 ```
 
-If FPO's named argument form of FP appeals to you, perhaps check out the library and see what you think. It has a full test suite and most of the major FP functionality you'd expect, including everything we covered in this text to get you up and going with Functional-Light JavaScript!
+如果FPO的命名参数写法对你有吸引力，你可以查看源码了解更多。 它拥有完整的测试套件和大多数你期待的FP方法，包括本文中介绍的所有内容，以帮助您更好的学习（使用）轻量级函数式编程！
 
-## Bonus #2: fasy
+## 干货 #2: fasy
 
-FP iterations (`map(..)`, `filter(..)`, etc.) are almost always modeled as synchronous operations, meaning we eagerly run through all the steps of the iteration immediately. As a matter of fact, other FP patterns like composition and even transducing are also iterations, and are also modeled exactly this way.
+FP迭代方法（`map(..)`，`filter(..)`等）几乎总是被看作同步操作，意味着立即执行所有步骤。 事实上，其他FP模式，如合成甚至转换也是迭代，并且也以这种方式执行。
 
 But what happens if one or more of the steps in an iteration needs to complete asynchronously? You might jump to thinking that Observables (see [Chapter 10](ch10.md/#observables)) is the natural answer, but they're not what we need.
 
@@ -302,10 +302,10 @@ Again, there will inevitably be cases where concurrent or serial asynchrony will
 
 Along with Observables, **fasy** will help you extend more FP patterns and principles to your asynchronous operations.
 
-## Summary
+## 总结
 
-JavaScript is not particularly designed as an FP language. However, it does have enough of the basics (like function values, closures, etc.) for us to make it FP-friendly. And the libraries we've examined here will help you do that.
+JavaScript并不是专门为FP语言而设计的。 但是它具备设计FP的该有的核心（如函数值，闭包等）。 就像上面我们探讨过的优秀的库。
 
-Armed with the concepts from this book, you're ready to start tackling real-world code. Find a good, comfortable FP library and jump in. Practice, practice, practice!
+通过学习本书中的知识，你可以开始开始coding了。 找一个好的，适合的FP库并使用之。练习，练习，练习！（注：多写才是王道）
 
-So... that's it. I've shared what I have for you, for now. I hereby officially certify you as a "Functional-Light JavaScript" programmer! It's time to close out this "chapter" of our story of learning FP together. But my learning journey still continues; I hope yours does, too!
+看到这里，我已经分享了我所有了解的。 我认为你完全可以称之为“轻量级函数式编程”程序员！ 现在是时候结束我们共同学习FP的“篇章”了。 但我的学习之旅仍在继续，我也希望你的确如此！
