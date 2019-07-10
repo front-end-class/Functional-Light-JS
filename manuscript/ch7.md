@@ -1,11 +1,11 @@
 # JavaScript轻量级函数式编程
 # 第7章: 闭包和对象
 
-## The Same Page
+## 达成共识
 
-First, let's make sure we're all on the same page when we refer to closures and objects. We're obviously in the context of how JavaScript deals with these two mechanisms, and specifically talking about simple function closure (see [Chapter 2, "Keeping Scope"](ch2.md/#keeping-scope)) and simple objects (collections of key-value pairs).
+首先，确保当我们提到闭包和对象时，我们都达成了共识。 我们探讨JavaScript如何处理这两种机制的上下文，特别是普通的函数闭包（参见[第2章“保持作用域”]（ch2.md/#keeping-scope））和普通对象（键值对集合） ）。
 
-For the record, here's an illustration of a simple function closure:
+普通函数闭包例子:
 
 ```js
 function outer() {
@@ -22,7 +22,7 @@ var three = outer();
 three();            // 3
 ```
 
-And an illustration of a simple object:
+普通对象例子:
 
 ```js
 var obj = {
@@ -37,24 +37,24 @@ function three(outer) {
 three( obj );       // 3
 ```
 
-Many people conjure lots of extra things when you mention "closure", such as the asynchronous callbacks or even the module pattern with encapsulation and information hiding. Similarly, "object" brings to mind classes, `this`, prototypes, and a whole slew of other utilities and patterns.
+当谈论到“闭包”时，许多人会想到许多额外的部分，例如异步回调，甚至包含封装和信息隐藏的模块模式。 类似地，“对象”带来了类，“this”，原型以及大量其他方法和模式。
 
-As we go along, we'll carefully address the parts of this external context that matter, but for now, try to just stick to the simplest interpretations of "closure" and "object" as illustrated here; it'll make our exploration less confusing.
+随着我们学习深入，我们将探讨这些重要的额外的部分，但是现在，我们先记住这里所说的“闭包”和“对象”的最简单的解释，这样可以使我们保持清晰。
 
-## Look Alike
+## 相似
 
-It may not be obvious how closures and objects are related. So let's explore their similarities first.
+闭包和对象的关系可能并不明显，我们首先探讨它们的相似之处。
 
-To frame this discussion, let me just briefly assert two things:
+基于这个讨论，我先简单地确定两件事：
 
-1. A programming language without closures can simulate them with objects instead.
-2. A programming language without objects can simulate them with closures instead.
+没有闭包的编程语言可以用对象模拟闭包。
+没有对象的编程语言可以用闭包来模拟对象。
 
-In other words, we can think of closures and objects as two different representations of a thing.
+换句话说，我们可以将闭包和对象视为事物的两种不同表示。
 
-### State
+### 状态
 
-Consider this code from before:
+思考以下代码：
 
 ```js
 function outer() {
@@ -72,9 +72,9 @@ var obj = {
 };
 ```
 
-Both the scope closed over by `inner()` and the object `obj` contain two elements of state: `one` with value `1` and `two` with value `2`. Syntactically and mechanically, these representations of state are different. But conceptually, they're actually quite similar.
+`inner()`函数和对象`obj`作用域都包含两个状态元素：`one`的值为1，`two`的值为2。在语法和机制上，这些状态的表示是不同的。但从概念上讲，它们非常相似。
 
-As a matter of fact, it's fairly straightforward to represent an object as a closure, or a closure as an object. Go ahead, try it yourself:
+事实上，将对象表示为闭包或将闭包表示为对象是相当简单的。来吧，尝试一下：
 
 ```js
 var point = {
@@ -84,7 +84,7 @@ var point = {
 };
 ```
 
-Did you come up with something like?
+你想到什么了吗?
 
 ```js
 function outer() {
@@ -100,9 +100,9 @@ function outer() {
 var point = outer();
 ```
 
-**Note:** The `inner()` function creates and returns a new array (aka, an object!) each time it's called. That's because JS doesn't afford us any capability to `return` multiple values without encapsulating them in an object. That's not technically a violation of our object-as-closure task, because it's just an implementation detail of exposing/transporting values; the state tracking itself is still object-free. With ES6+ array destructuring, we can declaratively ignore this temporary intermediate array on the other side: `var [x,y,z] = point()`. From a developer ergonomics perspective, the values are stored individually and tracked via closure instead of objects.
+**注意:** 每次`inner()`函数调用并返回一个新的数组(简称, 对象!) 。原因是JS没提供在不封装多个值的情况下“返回”多个值的功能。这在技术上并不违反对象即闭包这个问题，因为它只是暴露/传递值的实现细节；状态跟踪本身仍然是基于对象的。使用ES6+数组析构，我们可以声明性地忽略临时中间数组：`var [x,y,z] = point()`。从开发人员的角度来看，这些值是单独存储的，并通过闭包(而非对象)跟踪。
 
-What if we have nested objects?
+如果有嵌套对象怎么办？
 
 ```js
 var person = {
@@ -115,7 +115,7 @@ var person = {
 };
 ```
 
-We could represent that same kind of state with nested closures:
+同样的，可以使用嵌套闭包实现：
 
 ```js
 function outer() {
