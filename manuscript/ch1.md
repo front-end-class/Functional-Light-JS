@@ -124,54 +124,55 @@ function constructMsg(v) { return `The magic number is: ${v}`; }
 
 例如，一旦您学习了“map（…）”的功能，当您在任何程序中看到它时，您几乎可以立即发现并理解它。 但是每次你看到一个“for”循环，你就必须阅读整个循环才能理解它。“for”循环的语法可能是熟悉的，但实际上它所做的并不是；你每次都必须*读*才能理解。
 
+通过拥有看一眼就能识别的代码的能力，从而减少时间去了解代码在做什么，我们的注意力被释放出来，去思考更高层次的程序逻辑；那些都是最需要我们关注的重要内容。
 By having more code that's recognizable at a glance, and thus spending less time figuring out what the code is doing, our focus is freed up to think about the higher levels of program logic; this is the important stuff that most needs our attention anyway.
 
-FP (at least, without all the terminology weighing it down) is one of the most effective tools for crafting readable code. *That* is why it's so important.
+函数式编程 (至少，没有所有的术语来衡量它) 是制作可读代码最有效的工具之一。 这也是它如此重要的原因。
 
-## Readability
+## 可读性
 
-Readability is not a binary characteristic. It's a largely subjective human factor describing our relationship to code. And it will naturally vary over time as our skills and understanding evolve. I have experienced effects similar to the following figure, and anecdotally many others I've talked to have as well.
+可读性不是一个二进制特性。这在很大程度上是描述我们与代码关系的主观因素。随着时间的推移，我们的技能和理解自然会发生变化。我曾经历过类似下图的效果，而且我也曾与许多人聊过关于这些有趣的事。
 
 <p align="center">
     <img src="images/fig17.png" width="50%">
 </p>
 
-You may just find yourself experiencing similar effects as you work through the book. But take heart; if you stick this out, the curve comes back up!
+你可能会发现，当你读这本书的时候，你也会有类似的感受。但振作起来;如果你坚持下去，曲线就会上升!
 
-*Imperative* describes the code most of us probably already write naturally; it's focused on precisely instructing the computer *how* to do something. Declarative code -- the kind we'll be learning to write, which adheres to FP principles -- is code that's more focused on describing the *what* outcome.
+命令式代码描述我们大多数人已经自然编写的代码;它专注于精确指导计算机“如何”做某事。而我们将学习编写的声明式代码，它遵循函数式编程原则是更专注于描述结果输出的代码。
 
-Let's revisit the two code snippets presented earlier in this chapter.
+让我们回顾本章前面介绍的两个代码片段。
 
-The first snippet is imperative, focused almost entirely on *how* to do the tasks; it's littered with `if` statements, `for` loops, temporary variables, reassignments, value mutations, function calls with side effects, and implicit data flow between functions. You certainly *can* trace through its logic to see how the numbers flow and change to the end state, but it's not at all clear or straightforward.
+第一个片段是命令式的，几乎完全集中于“如何”完成任务;它充斥着“if”语句、“for”循环、临时变量、重新分配、值突变、带有副作用的函数调用以及函数之间的隐式数据流。当然，你“可以”通过它的逻辑来查看数字是如何流动和更改到最终状态的，但它一点也不清楚或直接。
 
-The second snippet is more declarative; it does away with most of those aforementioned imperative techniques. Notice there's no explicit conditionals, loops, side effects, reassignments, or mutations; instead, it employs well-known (to the FP world, anyway!) and trustable patterns like filtering, reduction, transducing, and composition. The focus shifts from low-level *how* to higher level *what* outcomes.
+第二个片段更具声明性一些;它消除了前面提到的大多数命令式技术。注意没有显式的条件、循环、副作用、重新分配或突变;相反，它使用我们所说的函数式编程和可信的模式，如过滤、还原、转换和组合。注重从低级别的“如何”转移到高级的“结果”。
 
-Instead of messing with an `if` statement to test a number, we delegate that to a well-known FP utility like `gte(..)` (greater-than-or-equal-to), and then focus on the more important task of combining that filter with another filter and a summation function.
+我们没有使用“if”语句来测试一个数字，而是将其委托给一个函数式编程里的实用程序，如“gte(..)”(大于或等于)去操作，然后将重点放在更重要的任务上，即将该过滤器与另一个过滤器和求和函数组合起来，得到我们想要的结果。
 
-Moreover, the flow of data through the second program is explicit:
+此外，通过第二个程序的数据流是明确的:
 
-1. A list of numbers goes into `printMagicNumber(..)`.
-2. One at a time those numbers are processed by `sumOnlyFavorites(..)`, resulting in a single number total of only our favorite kinds of numbers.
-3. That total is converted to a message string with `constructMsg(..)`.
-4. The message string is printed to the console with `console.log(..)`.
+1. 一系列数字经过函数 `printMagicNumber(..)`.
+2. 这些数字由“sumOnlyFavorites(..)”依次次处理，最后结果得到一个数字，其中得出一个我们最喜欢的数字
+3. 这个总数被“constructMsg(..)”函数转换为一个带有的消息字符串。
+4. 消息字符串通过`console.log(..)`打印出来.
 
-You may still feel this approach is convoluted, and that the imperative snippet was easier to understand. You're much more accustomed to it; familiarity has a profound influence on our judgments of readability. By the end of this book, though, you will have internalized the benefits of the second snippet's declarative approach, and that familiarity will spring its readability to life.
+从上面可以看到命令式代码片段更容易理解，但您可能仍然觉得这种方法很复杂，你的习惯与熟悉度对可读性的判断有深刻的影响。不过，在本书的最后，您将会潜移默化的了解到第二个代码片段的声明性方法的优点，并且熟悉性将使其可读性更强。
 
-I know asking you to believe that at this point is a leap of faith.
+我知道让你相信这一点是一种信仰的飞跃。
 
-It takes a lot more effort, and sometimes more code, to improve its readability as I'm suggesting, and to minimize or eliminate many of the mistakes that lead to bugs. Quite honestly, when I started writing this book, I could never have written (or even fully understood!) that second snippet. As I'm now further along on my journey of learning, it's more natural and comfortable.
+正如我所建议的，要提高它的可读性，并最小化或消除导致bug的许多错误，需要付出更多的努力，有时还需要编写更多的代码。坦白地说，当我开始写这本书的时候，我可能还完全写不出(甚至完全理解)第二段。当我更深入学习的时候，一切都变得自然与舒适。
 
-If you're hoping that FP refactoring, like a magic silver bullet, will quickly transform your code to be more graceful, elegant, clever, resilient, and concise -- that it will come easy in the short term -- unfortunately that's just not a realistic expectation.
+如果您希望使用函数式编程重构，那这就像一个神奇的银弹，能够快速地将您的代码转换为更优雅、更优雅、更聪明、更有弹性、更简洁的代码(短期内很容易实现)，万幸的是，这是一个现实的期望不难实现。
 
-FP is a very different way of thinking about how code should be structured, to make the flow of data much more obvious and to help your reader follow your thinking. It will take time. This effort is eminently worthwhile, but it can be an arduous journey.
+函数式编程是一种非常不同的方式来考虑代码应该如何构造，从而使数据流更加明显，并帮助读者跟随您的想法。这需要时间。这一努力非常值得，但可能是一段艰苦的旅程。
 
-It still often takes me multiple attempts at refactoring a snippet of imperative code into more declarative FP, before I end up with something that's clear enough for me to understand later. I've found converting to FP is a slow iterative process rather than a quick binary flip from one paradigm to another.
+通常，我仍然需要多次尝试将命令式代码片段重构为更具声明性的函数式编程模式的代码，然后才能得到一些足够清晰的代码，以便以后能够理解。我发现转换到函数式编程模式是一个缓慢的迭代过程，不像从一个范例到另一个范例的二进制转换那样快速。
 
-I also apply the "teach it later" test to every piece of code I write. After I've written a piece of code, I leave it alone for a few hours or days, then come back and try to read it with fresh eyes, and pretend as if I need to teach or explain it to someone else. Usually, it's jumbled and confusing the first few passes, so I tweak it and repeat!
+我还将“以后再教”测试应用到我编写的每段代码中。在我写完一段代码后，我会把它放在一边几个小时或几天，然后回来，试着用新的眼光来读它，假装我需要教别人或向别人解释它。通常，这样给别人解释的时候相当混乱，而且要不断的调整那些代码!
 
-I'm not trying to dampen your spirits. I really want you to hack through these weeds. I am glad I did it. I can finally start to see the curve bending upward toward improved readability. The effort has been worth it. It will be for you, too.
+我不是想让你扫兴。我真希望你能解开疑惑。我很高兴我做到了。我最终可以看到上面图像解释的曲线向上弯曲的状态，改造代码以提高可读性。这些努力是值得的。
 
-## Perspective
+## 客观判断
 
 Most other FP texts seem to take a top-down approach, but we're going to go the opposite direction: working from the ground up, we'll uncover the basic foundational principles that I believe formal FPers would admit are the scaffolding for everything they do. But for the most part we'll stay arm's length away from most of the intimidating terminology or mathematical notation that can so easily frustrate learners.
 
