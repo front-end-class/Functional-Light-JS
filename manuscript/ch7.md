@@ -100,7 +100,7 @@ function outer() {
 var point = outer();
 ```
 
-**注意:** 每次`inner()`函数调用并返回一个新的数组(简称, 对象!) 。原因是JS没提供在不封装多个值的情况下“返回”多个值的功能。这在技术上并不违反对象即闭包这个问题，因为它只是暴露/传递值的实现细节；状态跟踪本身仍然是基于对象的。使用ES6+数组析构，我们可以声明性地忽略临时中间数组：`var [x,y,z] = point()`。从开发人员的角度来看，这些值是单独存储的，并通过闭包(而非对象)跟踪。
+**注意:** 每次`inner()` 函数调用并返回一个新的数组(简称, 对象!) 。原因是JS没提供在不封装多个值的情况下“返回”多个值的功能。这在技术上并不违反对象即闭包这个问题，因为它只是暴露/传递值的实现细节；状态跟踪本身仍然是基于对象的。使用ES6+数组析构，我们可以声明性地忽略临时中间数组：`var [x,y,z] = point()`。从开发人员的角度来看，这些值是单独存储的，并通过闭包(而非对象)跟踪。
 
 如果有嵌套对象怎么办？
 
@@ -138,7 +138,7 @@ function outer() {
 var person = outer();
 ```
 
-Let's practice going the other direction, from closure to object:
+让我们试试从闭包转为对象：
 
 ```js
 function point(x1,y1) {
@@ -155,7 +155,7 @@ var pointDistance = point( 1, 1 );
 pointDistance( 4, 5 );      // 5
 ```
 
-`distFromPoint(..)` is closed over `x1` and `y1`, but we could instead explicitly pass those values as an object:
+`distFromPoint(..)`封装了`x1`和`y1`, 但我们可以显式地传入值作为对象：
 
 ```js
 function pointDistance(point,x2,y2) {
@@ -173,13 +173,13 @@ pointDistance(
 // 5
 ```
 
-The `point` object state explicitly passed in replaces the closure that implicitly held that state.
+显式的传入`point`对象替换隐式的闭包状态。
 
-### Behavior, Too!
+### 行为也如此!
 
-It's not just that objects and closures represent ways to express collections of state, but also that they can include behavior via functions/methods. Bundling data with its behavior has a fancy name: encapsulation.
+对象和闭包不仅表示表示状态集合的方法，而且还包含函数/方法。将数据与其行为捆绑在一起有一个奇特的名称：封装。
 
-Consider:
+试想一下:
 
 ```js
 function person(name,age) {
@@ -196,9 +196,9 @@ var birthdayBoy = person( "Kyle", 36 );
 birthdayBoy();          // Happy 37th Birthday, Kyle!
 ```
 
-The inner function `happyBirthday()` has closure over `name` and `age` so that the functionality therein is kept with the state.
+内部函数`happyBirthday()` 通过闭包引入`name` 和 `age` 使其功能与状态保持一致。（注：保持了变量引用和不销毁）
 
-We can achieve that same capability with a `this` binding to an object:
+我们可以通过将`this`绑定到对象来实现相同的能力：
 
 ```js
 var birthdayBoy = {
@@ -216,11 +216,11 @@ birthdayBoy.happyBirthday();
 // Happy 37th Birthday, Kyle!
 ```
 
-We're still expressing the encapsulation of state data with the `happyBirthday()` function, but with an object instead of a closure. And we don't have to explicitly pass in an object to a function (as with earlier examples); JavaScript's `this` binding easily creates an implicit binding.
+我们仍然用`happyBirthday()`函数来表示状态数据的封装，但是使用对象而不是闭包。 而且我们不必将对象显式传递给函数（与前面的示例一样）； JavaScript的`this`绑定很容易创建一个隐式绑定。
 
-Another way to analyze this relationship: a closure associates a single function with a set of state, whereas an object holding the same state can have any number of functions to operate on that state.
+另一方面分析此关系：闭包将单个函数与一组状态相关联，而对象可以保持相同状态，而持有相同状态的对象可以有任意数量的函数对该状态进行操作。
 
-As a matter of fact, you could even expose multiple methods with a single closure as the interface. Consider a traditional object with two methods:
+事实上，你甚至可以使用单个闭包作为接口来暴露多个方法。 思考以下使用两种方法的传统对象：
 
 ```js
 var person = {
@@ -238,7 +238,7 @@ person.first() + " " + person.last();
 // Kyle Simpson
 ```
 
-Just using closure without objects, we could represent this program as:
+只使用闭包，可以这么做：
 
 ```js
 function createPerson(firstName,lastName) {
@@ -272,13 +272,13 @@ person( "first" ) + " " + person( "last" );
 // Kyle Simpson
 ```
 
-While these programs look and feel a bit different ergonomically, they're actually just different implementation variations of the same program behavior.
+这些程序在人机工程学上看起来有点不同，事实上只是相同程序行为的不同实现而已。
 
-### (Im)mutability
+### (不)可变数据
 
-Many people will initially think that closures and objects behave differently with respect to mutability; closures protect from external mutation while objects do not. But, it turns out, both forms have identical mutation behavior.
+许多人最初会认为闭包和对象在可变性方面表现不同，闭包能保护免受外部改变（影响），而对象不会。但事实证明，两种形式都有相同的可变行为。
 
-That's because what we care about, as discussed in [Chapter 6](ch6.md), is **value** mutability, and this is a characteristic of the value itself, regardless of where or how it's assigned:
+正如我们在 [第6章](ch6.md)所讨论的，需要关心的，**值**的可变性，这是值本身的一个特征，无论它在何处或如何赋值：
 
 ```js
 function outer() {
@@ -296,9 +296,9 @@ var xyPublic = {
 };
 ```
 
-The value stored in the `x` lexical variable inside `outer()` is immutable -- remember, primitives like `2` are by definition immutable. But the value referenced by `y`, an array, is definitely mutable. The exact same goes for the `x` and `y` properties on `xyPublic`.
+`outer()`的内部变量`x`（基础类型）值是不可变的 - 记住，像`2`这样的基本类型都是不可变的。 但是，数组`y`（引用类型）引用的值是可变的。 `xyPublic`里的`x`和`y`属性也是这个道理。
 
-We can reinforce the point that objects and closures have no bearing on mutability by pointing out that `y` is itself an array, and thus we need to break this example down further:
+我们可以通过指出`y`本身就是一个数组来强调对象和闭包对可变性没有影响，因此我们需要进一步分解这个例子：
 
 ```js
 function outer() {
@@ -326,15 +326,15 @@ var xyPublic = {
 };
 ```
 
-If you think about it as "turtles (aka, objects) all the way down", at the lowest level, all state data is primitives, and all primitives are value-immutable.
+如果您将其视为“turtles (aka, objects) all the way down”（注：不太理解作者用意），那么在最低级别上，所有状态数据都是基础类型，并且所有基础类型都是不可变值。
 
-Whether you represent this state with nested objects, or with nested closures, the values being held are all immutable.
+无论使用嵌套对象表示此状态，还是使用嵌套闭包表示此状态，值都是不可变的。
 
-### Isomorphic
+### 同构
 
-The term "isomorphic" gets thrown around a lot in JavaScript these days, and it's usually used to refer to code that can be used/shared in both the server and the browser. I wrote a blog post a while back that calls bogus on that usage of this word "isomorphic", which actually has an explicit and important meaning that's being clouded.
+“同构”这个术语在JavaScript中经常出现，通常用于指可以在服务器和浏览器中使用/共享的代码。不久前，我写了一篇博客文章，对“同构”这个词的用法进行了抨击，实际上它有一个明确而重要的含义，但却被用错地方。
 
-Here's some selections from a part of that post:
+以下列举这篇文章的部分节选：
 
 > What does isomorphic mean? Well, we could talk about it in mathematical terms, or sociology, or biology. The general notion of isomorphism is that you have two things which are similar in structure but not the same.
 >
