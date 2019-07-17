@@ -3,7 +3,7 @@
 
 ## 达成共识
 
-首先，确保当我们提到闭包和对象时，我们都达成了共识。 我们探讨JavaScript如何处理这两种机制的上下文，特别是普通的函数闭包（参见[第2章“保持作用域”]（ch2.md/#keeping-scope））和普通对象（键值对集合） ）。
+首先，确保当我们提到闭包和对象时，我们都达成了共识。 我们探讨JavaScript如何处理这两种机制的上下文，特别是普通的函数闭包（参见[第2章“保持作用域”](ch2.md/#keeping-scope)）和普通对象（键值对集合） ）。
 
 普通函数闭包例子:
 
@@ -72,7 +72,7 @@ var obj = {
 };
 ```
 
-`inner()`函数和对象`obj`作用域都包含两个状态元素：`one`的值为1，`two`的值为2。在语法和机制上，这些状态的表示是不同的。但从概念上讲，它们非常相似。
+`inner()`函数和对象`obj`作用域都包含两个状态元素：`one`的值为`1`，`two`的值为`2`。在语法和机制上，这些状态的表示是不同的。但从概念上讲，它们非常相似。
 
 事实上，将对象表示为闭包或将闭包表示为对象是相当简单的。来吧，尝试一下：
 
@@ -336,29 +336,29 @@ var xyPublic = {
 
 以下列举这篇文章的部分节选：
 
-> What does isomorphic mean? Well, we could talk about it in mathematical terms, or sociology, or biology. The general notion of isomorphism is that you have two things which are similar in structure but not the same.
->
-> In all those usages, isomorphism is differentiated from equality in this way: two values are equal if they’re exactly identical in all ways, but they are isomorphic if they are represented differently but still have a 1-to-1, bi-directional mapping relationship.
->
-> In other words, two things A and B would be isomorphic if you could map (convert) from A to B and then go back to A with the inverse mapping.
+> 同构是什么意思呢？ 我们可以用数学术语，社会学或生物学来解释，同构概念是两个结构相似但不相同的东西。
 
-Recall in [Chapter 2, "Brief Math Review"](ch2.md/#brief-math-review), we discussed the mathematical definition of a function as being a mapping between inputs and outputs. We pointed out this is technically called a morphism. An isomorphism is a special case of bijective (aka, 2-way) morphism that requires not only that the mapping must be able to go in either direction, but also that the behavior is identical in either form.
+> 在所有这些用法中，同构和相等的区别在这里：如果两个值在所有方面完全相同，则它们是相等的，但如果它们以不同的方式表示但仍具有1对1的双向性，则它们是同构的 映射关系。
 
-But instead of thinking about numbers, let's relate isomorphism to code. Again quoting my blog post:
+> 换句话说，如果你可以从A映射（转换）到B然后用逆映射返回到A，那么A和B可以称为是同构的。
 
-> [W]hat would isomorphic JS be if there were such a thing? Well, it could be that you have one set of JS code that is converted to another set of JS code, and that (importantly) you could convert from the latter back to the former if you wanted.
+回顾一下[第2章](ch2.md/#brief-math-review)，我们讨论了函数的数学定义，即输入和输出之间的映射，这在学术上被称为态射。 同构是一种双射（又称双向）态射的特殊情况，它不仅要求映射必须能够在任一方向上进行，而且要求行为在任何一种形式中都是相同的。
 
-As we asserted earlier with our examples of closures-as-objects and objects-as-closures, these representative alternations go either way. In this respect, they are isomorphisms to each other.
+但是，我们不要考虑数学术语，而是将同构与代码联系起来。 再次引用我的博文：
 
-Put simply, closures and objects are isomorphic representations of state (and its associated functionality).
+> 如果真有这种东西，同构JS会是什么？它可能是一组JS代码被转换成另一组JS代码，而且（重要的是）如果有需要，可以将后者转换回前者。
 
-The next time you hear someone say "X is isomorphic to Y", what they mean is, "X and Y can be converted from either one to the other in either direction, and not lose information."
+正如我们在前面的 “闭包作为对象” 和 “对象作为闭包” 示例中所说的那样，它们的表达可以任意替换。因此，它们彼此是同构的。
 
-### Under the Hood
+简单地说，闭包和对象是状态(及其相关功能)的同构表示。
 
-So, we can think of objects as an isomorphic representation of closures from the perspective of code we could write. But we can also observe that a closure system could actually be implemented -- and likely is -- with objects!
+下次当你听到有人说 “X与Y是同构” 时，他们的意思是“X和Y可以从任何一个方向转换到另一个方向，而不会丢失特性。”
 
-Think about it this way: in the following code, how is JS keeping track of the `x` variable for `inner()` to keep referencing, well after `outer()` has already run?
+### 深入内部结构
+
+因此，从编写代码的角度来看可以将对象看作闭包的同构表示。但我们也观察到，闭包系统实际上可以用对象实现——而且很可能是这样的!
+
+考虑以下代码：JS如何追踪`x`变量，以便` inner()`函数在`outer()`函数运行之后仍然保持它的引用?
 
 ```js
 function outer() {
