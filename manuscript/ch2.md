@@ -1,61 +1,60 @@
-# Functional-Light JavaScript
-# Chapter 2: The Nature Of Functions
+# 章节2: 函数的性质
 
-Functional Programming is **not just programming with the `function` keyword.** Oh, if only it was that easy -- I could end the book right here! Nevertheless, functions really *are* at the center of FP. And it's how we use functions that makes our code *functional*.
+函数式编程不仅仅是用“function”关键字进行定义来编程。如果这么简单的话，我可以在这里结束这本书！函数确实是函数式编程的核心。而且函数的方式使我们的代码*起作用*。
 
-But how sure are you that you know what *function* really means?
+但是你有多确定“函数”的真正含义？
 
-In this chapter, we're going to lay the groundwork for the rest of the book by exploring all the foundational aspects of functions. Actually, this is a review of all the things even a non-FP programmer should know about functions. But certainly if we want to get the most out of FP concepts, it's essential we *know* functions inside and out.
+在这一章中，我们将通过探索函数的所有基本面，为本书的其余部分奠定基础。实际上，这是对所有内容的回顾，即使是非函数式编程程序员也应该了解函数。但当然，如果我们想从函数式编程的概念中得到最大的好处，我们就必须了解内部和外部的函数。
 
-Brace yourself, because there's a lot more to the function than you may have realized.
+打起精神来，因为这个功能比你想象的要多得多。
 
-## What Is a Function?
+## 什么是函数？
 
-The question "What is a function?" superficially seems to have an obvious answer: a function is a collection of code that can be executed one or more times.
+这个问题，从表面上看，似乎有一个显而易见的答案：函数是可以执行一次或多次的代码集合。
 
-While this definition is reasonable, it's missing some very important essence that is the core of a *function* as it applies to FP. So let's dig below the surface to understand functions more completely.
+虽然这个定义看起来很合理，但它缺少一些非常重要的本质，即*函数*的核心，因为它适用于函数式编程。因此，让我们从表面开始挖掘，以更全面地理解函数。
 
-### Brief Math Review
+### 简单的数学复习
 
-I know I've promised we'd stay away from math as much as possible, but bear with me for a moment as we quickly observe some fundamental things about functions and graphs from algebra before we proceed.
+我知道我答应过我们会尽量远离数学，但是在我们继续之前，请稍等片刻，因为我们很快就能从代数中观察到一些关于函数和图的基本知识。
 
-Do you remember learning anything about `f(x)` back in school? What about the equation `y = f(x)`?
+你记得在学校里学过“f（x）”或者“y=f（x）”吗？
 
-Let's say an equation is defined like this: <code>f(x) = 2x<sup>2</sup> + 3</code>. What does that mean? What does it mean to graph that equation? Here's the graph:
+假设一个方程是这样定义的: <code>f(x) = 2x<sup>2</sup> + 3</code>. 那是什么意思？用图表表示这个方程意味着什么？下面是图表:
 
 <p align="center">
     <img src="images/fig1.png" width="40%">
 </p>
 
-What you can notice is that for any value of `x`, say `2`, if you plug it into the equation, you get `11`. What is `11`, though? It's the *return value* of the `f(x)` function, which earlier we said represents a `y` value.
+你能注意到的是，对于x的任何值，比如2，如果你把它插入方程，你得到11。11是什么？它是f（x）函数的返回值，前面我们说它代表y值。
 
-In other words, we can choose to interpret the input and output values as a point at `(2,11)` on that curve in the graph. And for every value of `x` we plug in, we get another `y` value that pairs with it as a coordinate for a point. Another is `(0,3)`, and another is `(-1,5)`. Put all those points together, and you have the graph of that parabolic curve as shown here.
+换句话说，我们可以选择将输入和输出值解释为图中曲线上`（2，11）`处的点。对于我们插入的每一个'x'值，我们得到另一个'y'值，作为一个点的坐标与它配对。另一个是`（0,3）`，另一个是`（-1,5）`。把所有这些点放在一起，就得到了抛物线图，如图所示。
 
-So what's any of this got to do with FP?
+那么，这和函数式编程有什么关系呢？
 
-In math, a function always takes input(s), and always gives an output. A term you'll often hear around FP is "morphism"; this is a fancy way of describing a set of values that maps to another set of values, like the inputs of a function related to the outputs of that function.
+在数学中，函数总是有输入并有输出。在函数式编程中经常听到的一个术语是’态射‘（morphism）；两个数学结构之间保持结构的一种过程抽象方法，例如与该函数的输出对应另一函数的输入。
 
-In algebraic math, those inputs and outputs are often interpreted as components of coordinates to be graphed. In our programs, however, we can define functions with all sorts of input(s) and output(s), even though they'll rarely be interpreted as a visually plotted curve on a graph.
+在代数数学中，这些输入和输出通常被解释为要绘制图形的坐标的组成部分。然而，在我们的程序中，虽然很少被解释为图形上的可视绘制曲线，当时我们可以定义具有各种输入和输出的函数。
 
-### Function vs Procedure
+### 功能与程序
 
-So why all the talk of math and graphs? Because essentially Functional Programming is about embracing using functions as *functions* in this mathematical sense.
+那么，为什么老是在讨论数学与图表呢？因为本质上，函数式编程就是在数学意义上接受使用函数方法作为特定程序。
 
-You may be more accustomed to thinking of functions as procedures. What's the difference? A procedure is an arbitrary collection of functionality. It may have inputs, it may not. It may have an output (`return` value), it may not.
+您可能更习惯于将函数视为过程。有什么区别？过程是功能的任意集合。它可能有输入，也可能没有。它可能有输出（返回一个值），也可能没有。
 
-A function takes input(s) and definitely always has a `return` value.
+函数接受输入，并且一定有一个“返回”值。
 
-If you plan to do Functional Programming, **you should be using functions as much as possible**, and trying to avoid procedures wherever possible. All your `function`s should take input(s) and return output(s).
+如果您计划进行函数编程，**您应该尽可能多地使用函数**，并尽可能避免使用过程。所有的“函数”都应该接受输入并返回输出。
 
-Why? The answer to that will have many levels of meaning that we'll uncover throughout this book.
+为什么这么做？这有很多层面的意义，我们会在本书中揭露。
 
-## Function Input
+## 函数的输入
 
-So far, we can conclude that functions must expect input. But let's dig into how function inputs work.
+到目前为止，我们可以得出这样的结论：函数必须有输入。但让我们来深入研究函数输入是如何工作的。
 
-You sometimes hear people refer to these inputs as "arguments" and sometimes as "parameters". So what's that all about?
+您有时会听到人们将这些输入称为“参数”，有时称为“因素”。那这是怎么回事？
 
-*Arguments* are the values you pass in, and *parameters* are the named variables inside the function that receive those passed-in values. Example:
+*参数*是您传入的值，*因素*是接收传入值的函数内的命名变量。例子：
 
 ```js
 function foo(x,y) {
@@ -66,16 +65,15 @@ var a = 3;
 
 foo( a, a * 2 );
 ```
+`“a”和“a*2”是函数“foo（…）”调用的*参数*，“x”和“y”是接收参数值的*参数*（分别为“3”和“6”（“a*2”的结果））。
 
-`a` and `a * 2` (actually, the result of `a * 2`, which is `6`) are the *arguments* to the `foo(..)` call. `x` and `y` are the *parameters* that receive the argument values (`3` and `6`, respectively).
+**注意：**在javascript中，不要求*参数*的数量与函数*因素*的数量匹配。如果传递的*参数*多于声明接收它们的函数*参数*，那么这些值就不会受到影响。这些值可以通过几种不同的方式访问，包括以前可能听说过的“arguments”对象。如果传递的*参数*少于声明的函数*参数*，则每个不匹配的参数都将被视为“未定义”变量，这意味着它在函数的作用域内存在并可用，但只以空的“未定义”值开始。
 
-**Note:** In JavaScript, there's no requirement that the number of *arguments* matches the number of *parameters*. If you pass more *arguments* than you have declared *parameters* to receive them, the values pass in just fine untouched. These values can be accessed in a few different ways, including the old-school `arguments` object you may have heard of before. If you pass fewer *arguments* than the declared *parameters*, each unmatched parameter is treated as an "undefined" variable, meaning it's present and available in the scope of the function, but just starts out with the empty `undefined` value.
+### 默认参数
 
-### Defaulting Parameters
+从ES6开始，参数可以声明*默认值*。如果没有传递该参数的参数，或者传递了值“undefined”，则将替换默认的赋值表达式。
 
-As of ES6, parameters can declare *default values*. In the case where the argument for that parameter is not passed, or it's passed the value `undefined`, the default assignment expression is substituted.
-
-Consider:
+想一想:
 
 ```js
 function foo(x = 3) {
@@ -87,20 +85,18 @@ foo( undefined );       // 3
 foo( null );            // null
 foo( 0 );               // 0
 ```
+考虑有助于函数可用性的默认情况是一个很好的实践。然而，在读取和理解函数如何被调用的变化方面，默认参数可能会导致更复杂的问题。在多大程度上依赖此功能方面要谨慎。
 
-It's always a good practice to think about any default cases that can aid the usability of your functions. However, defaulting parameters can lead to more complexity in terms of reading and understanding the variations of how a function is called. Be judicious in how much you rely on this feature.
+### 计数输入
 
-### Counting Inputs
-
-The number of arguments a function "expects" -- how many arguments you'll likely want to pass to it -- is determined by the number of parameters that are declared:
+函数“预期”的参数个数由声明的参数个数决定，预期个数就是您可能希望传递给它的参数个数:
 
 ```js
 function foo(x,y,z) {
     // ..
 }
 ```
-
-`foo(..)` *expects* three arguments, because it has three declared parameters. This count has a special term: arity. Arity is the number of parameters in a function declaration. The arity of `foo(..)` is `3`.
+` foo（..）`需要三个参数，因为它有三个已声明的参数。这个计数有一个特殊的术语：参数数量。参数数量是指函数声明中的参数数。“foo（…）”的参数数量为“3”。
 
 Furthermore, a function with arity 1 is also called "unary", a function with arity 2 is also called "binary", and a function with arity 3 or higher is called "n-ary".
 
