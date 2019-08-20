@@ -96,11 +96,12 @@ function foo(x,y,z) {
     // ..
 }
 ```
-` foo（..）`需要三个参数，因为它有三个已声明的参数。这个计数有一个特殊的术语：参数数量。参数数量是指函数声明中的参数数。“foo（…）”的参数数量为“3”。
+` foo（..）`需要三个参数，因为它有三个已声明的参数。这个计数有一个特殊的术语：参数数量。参数数量是指函数声明中的参数个数。“foo（…）”的参数数量为“3”。
 
-Furthermore, a function with arity 1 is also called "unary", a function with arity 2 is also called "binary", and a function with arity 3 or higher is called "n-ary".
+此外，一个参数的函数也称为“一元”函数，二个参数的函数也称为“二元”函数，n个参数或更高的函数称为“n元”函数。
 
-You may wish to inspect a function reference during the runtime of a program to determine its arity. This can be done with the `length` property of that function reference:
+
+您可能希望在程序运行时检查函数引用以确定其参数个数。这可以通过函数引用的“length”属性来实现：
 
 ```js
 function foo(x,y,z) {
@@ -109,14 +110,13 @@ function foo(x,y,z) {
 
 foo.length;             // 3
 ```
+在执行期间确定参数个数的一个原因是，一段代码可以从多个地方引用一个函数，并根据参数个数的不同发送不同的值。
 
-One reason for determining the arity during execution would be if a piece of code received a function reference from multiple sources, and sent different values depending on the arity of each.
-
-For example, imagine a case where an `fn` function reference could expect one, two, or three arguments, but you always want to just pass a variable `x` in the last position:
+例如，假设一个情况，一个“fn”函数引用可能需要一个、两个或三个参数，但您总是希望在最后一个位置传递一个变量“x”:
 
 ```js
-// `fn` is set to some function reference
-// `x` exists with some value
+// `fn` 设置为某个函数引用
+// `x` 存在一些值
 
 if (fn.length == 1) {
     fn( x );
@@ -128,10 +128,10 @@ else if (fn.length == 3) {
     fn( undefined, undefined, x );
 }
 ```
+**提示：**函数的“length”属性是只读的，声明函数时就已经确定。它被看作是一段描述函数预期用途的元数据。
 
-**Tip:** The `length` property of a function is read-only and it's determined at the time you declare the function. It should be thought of as essentially a piece of metadata that describes something about the intended usage of the function.
+需要注意的一点是，某些类型的参数列表可能会使函数的“length”属性与您可能期望的不同：
 
-One gotcha to be aware of is that certain kinds of parameter list variations can make the `length` property of the function report something different than you might expect:
 
 ```js
 function foo(x,y = 2) {
@@ -150,8 +150,7 @@ foo.length;             // 1
 bar.length;             // 1
 baz.length;             // 1
 ```
-
-What about counting the number of arguments the current function call received? This was once trivial, but now the situation is slightly more complicated. Each function has an `arguments` object (array-like) available that holds a reference to each of the arguments passed in. You can then inspect the `length` property of `arguments` to figure out how many were actually passed:
+要计算当前函数调用接收到的参数个数？这曾经是微不足道的，但现在情况稍微复杂一些。每个函数都有一个“arguments”对象（类似于数组），用于保存对传入的每个参数的引用。然后可以检查“arguments”的“length”属性，以确定实际传递了多少个:
 
 ```js
 function foo(x,y,z) {
@@ -161,23 +160,23 @@ function foo(x,y,z) {
 foo( 3, 4 );    // 2
 ```
 
-As of ES5 (and strict mode, specifically), `arguments` is considered by some to be sort of deprecated; many avoid using it if possible. In JS, we "never" break backward compatibility no matter how helpful that may be for future progress, so `arguments` will never be removed. But it's now commonly suggested that you avoid using it whenever possible.
+从ES5（特别是严格模式）开始，“arguments”被一些人认为是不赞成使用的；许多人会避免使用它。在JS中，我们“从不”破坏向后兼容性，不管这对将来的进展有多大帮助，所以“arguments”永远不会被删除。但现在普遍建议尽可能避免使用它
 
-However, I suggest that `arguments.length`, and only that, is OK to keep using for those cases where you need to care about the passed number of arguments. A future version of JS might possibly add a feature that offers the ability to determine the number of arguments passed without consulting `arguments.length`; if that happens, then we can fully drop usage of `arguments`!
+但是，我建议“arguments.length”，仅用于可以需要传递的参数数量的情况。未来版本的JS可能会添加一个功能，该功能可以确定传递的参数的数量，而不需要查询“arguments.length”；如果发生这种情况，那么我们可以完全放弃使用“arguments”！
 
-Be careful: **never** access arguments positionally, like `arguments[1]`. Stick to `arguments.length` only, and only if you must.
+小心：**从不**按位置访问参数，如“arguments[1]”。如果必须的话，只保留对“arguments.length”的引用。
 
-Except, how will you access an argument that was passed in a position beyond the declared parameters? I'll answer that in a moment; but first, take a step back and ask yourself, "Why would I want to do that?" Seriously. Think about that closely for a minute.
+另外，如何在声明参数之外的位置访问传递的参数？我稍后回答；但首先仔细考虑一下问问自己，“我为什么要这样做？”。
 
-It should be pretty rare that this occurs; it shouldn't be something you regularly expect or rely on when writing your functions. If you find yourself in such a scenario, spend an extra 20 minutes trying to design the interaction with that function in a different way. Name that extra argument even if it's exceptional.
+这种情况应该很少发生；它不应该是您在编写函数时经常需要使用的方式。如果您发现自己处于这样的场景中，请花费额外的20分钟尝试以不同的方式设计与该函数的交互。命名这个额外的论点，即使它是例外的。
 
-A function signature that accepts an indeterminate amount of arguments is referred to as a variadic function. Some people prefer this style of function design, but I think you'll find that often the FPer wants to avoid these where possible.
+接受不确定数量参数的函数称为可变函数。有些人更喜欢这种类型的功能设计，但我认为您会发现，一般情况下，函数编程人员通常会避免这样设计。
 
-OK, enough harping on that point.
+好吧，就这一点说得够多了。
 
-Say you do need to access the arguments in a positional array-like way, possibly because you're accessing an argument that doesn't have a formal parameter at that position. How do we do it?
+假设您确实需要以类数组的方式访问参数，可能是您访问的参数在该位置没有正式参数的需要。那我们要怎么做？
 
-ES6 to the rescue! Let's declare our function with the `...` operator -- variously referred to as "spread", "rest", or (my preference) "gather":
+ES6可以解决这一点！可以用`…`操作符来声明我们的函数——各种各样地称为“spread”、“rest”或“gather”（我的首选项）：
 
 ```js
 function foo(x,y,z,...args) {
@@ -185,7 +184,7 @@ function foo(x,y,z,...args) {
 }
 ```
 
-See the `...args` in the parameter list? That's an ES6 declarative form that tells the engine to collect (ahem, "gather") all remaining arguments (if any) not assigned to named parameters, and put them in a real array named `args`. `args` will always be an array, even if it's empty. But it **will not** include values that are assigned to the `x`, `y`, and `z` parameters, only anything else that's passed in beyond those first three values:
+看到参数列表中的“…args”？这是一个ES6声明形式，它告诉引擎收集所有未分配给命名参数的剩余参数，并将它们放入名为“args”的实数数组中。` args`将始终是一个数组，即使它是空的。但它**不会**包括分配给“x”、“y”和“z”参数的值，只包括超出前三个值的其他值：
 
 ```js
 function foo(x,y,z,...args) {
@@ -198,23 +197,22 @@ foo( 1, 2, 3, 4 );      // 1 2 3 [ 4 ]
 foo( 1, 2, 3, 4, 5 );   // 1 2 3 [ 4, 5 ]
 ```
 
-So, if you *really* want to design a function that can account for an arbitrary number of arguments to be passed in, use `...args` (or whatever name you like) on the end. Now, you'll have a real, non-deprecated, non-yucky array to access those argument values from.
+因此，如果您*真的*想设计一个函数来解释要传入的任意数量的参数，请在末尾使用“…args”（也可以使用其他变量名称）。现在，您将拥有一个真正的、不推荐使用的、不易出错的数组来访问这些参数值。
 
-Just pay attention to the fact that the value `4` is at position `0` of that `args`, not position `3`. And its `length` value won't include those three `1`, `2`, and `3` values. `...args` gathers everything else, not including the `x`, `y`, and `z`.
+注意值“4”位于“args”的“0”位置，而不是“3”位置。它的“length”值不包括这三个“1”、“2”和“3”值。`…args'收集其他所有的参数，不包括'x'、'y'和'z'。
 
-You *can* use the `...` operator in the parameter list even if there's no other formal parameters declared:
+您*可以*使用参数列表中的“…”扩展运算符，即使没有声明其他正式参数：
 
 ```js
 function foo(...args) {
     // ..
 }
 ```
+现在，“args”将是参数的完整数组，不管它们是什么，您可以使用“args.length”来确切知道传入了多少个参数。如果你这样做的话，使用“args[1]”或“args[317]”是安全的。不过，请不要传递318个参数。
 
-Now `args` will be the full array of arguments, whatever they are, and you can use `args.length` to know exactly how many arguments have been passed in. And you're safe to use `args[1]` or `args[317]` if you so choose. Please don't pass in 318 arguments, though.
+### 参数数组
 
-### Arrays of Arguments
-
-What if you wanted to pass along an array of values as the arguments to a function call?
+如果您想将一个数组作为参数传递给函数调用，该怎么办？
 
 ```js
 function foo(...args) {
@@ -226,25 +224,24 @@ var arr = [ 1, 2, 3, 4, 5 ];
 foo( ...arr );                      // 4
 ```
 
-Our new friend `...` is used, but now not just in the parameter list; it's also used in the argument list at the call-site. It has the opposite behavior in this context. In a parameter list, we said it *gathered* arguments together. In an argument list, it *spreads* them out. So the contents of `arr` are actually spread out as individual arguments to the `foo(..)` call. Do you see how that's different from just passing in a reference to the whole `arr` array?
+上面“…”被使用了，但现在不仅在参数列表中；它也在调用函数的参数列表中使用。在这种情况下，它有相反的行为。在参数列表中，我们说它*收集*参数个数。在参数列表中，`...`是*展开*了数组的参数。所以“arr”的内容实际上是作为“foo（…）”调用的单个参数展开的。那这和仅仅传递一个对整个“arr”数组的引用有什么不同吗？
 
-By the way, multiple values and `...` spreadings can be interleaved, as you see fit:
+还有，多个值和`…`扩展参数可以交错：
 
 ```js
 var arr = [ 2 ];
 
 foo( 1, ...arr, 3, ...[4,5] );      // 4
 ```
+思考这个“…”：在值列表位置，它是*展开*的功能。在赋值位置的参数列表收集参数，赋值给使用参数。
 
-Think of `...` in this symmetric sense: in a value-list position, it *spreads*. In an assignment position -- like a parameter list, because arguments get *assigned to* parameters -- it *gathers*.
+无论您调用哪种行为，`…`都会使处理参数数组更加容易。“slice（…）”、“concat（…）”和“apply（…）”的日子已经变得没有用了，这些方法都需要数组参数值。
 
-Whichever behavior you invoke, `...` makes working with arrays of arguments much easier. Gone are the days of `slice(..)`, `concat(..)`, and `apply(..)` to wrangle our argument value arrays.
+**提示：**实际上，这些方法并不是完全无用的。在本书的整个代码中，我们将有一些地方依赖它们。但是，在大多数地方，`…`将会更加声明性地可读，因此更可取。
 
-**Tip:** Actually, these methods are not entirely useless. There will be a few places we rely on them throughout the code in this book. But certainly in most places, `...` will be much more declaratively readable, and preferable as a result.
+### 参数的解构
 
-### Parameter Destructuring
-
-Consider the variadic `foo(..)` from the previous section:
+考虑上一节中的变量“foo（..）”：
 
 ```js
 function foo(...args) {
@@ -254,7 +251,7 @@ function foo(...args) {
 foo( ...[1,2,3] );
 ```
 
-What if we wanted to change that interaction so the caller of our function passes in an array of values instead of individual argument values? Just drop the two `...` usages:
+如果我们想改变这种交互，让函数的调用者传递一个数组，而不是单个参数值，该怎么办？试下这两种用法：
 
 ```js
 function foo(args) {
@@ -264,11 +261,11 @@ function foo(args) {
 foo( [1,2,3] );
 ```
 
-Simple enough. But what if now we wanted to give a parameter name to each of the first two values in the passed-in array? We aren't declaring individual parameters anymore, so it seems we lost that ability.
+很简单。但是，如果现在我们想给传入数组中前两个值中的每一个都提供一个参数名呢？我们不再声明单个参数，我们似乎实现不了。
 
-Thankfully, ES6 destructuring is the answer. Destructuring is a way to declare a *pattern* for the kind of structure (object, array, etc.) that you expect to see, and how decomposition (assignment) of its individual parts should be processed.
+感谢ES6给出了答案。解构是一种为您希望看到的结构类型（对象、数组等）声明*模式*的方法，以及如何处理其各个部分的分解（分配）。
 
-Consider:
+想一想:
 
 <a name="funcparamdestr"></a>
 
@@ -280,13 +277,13 @@ function foo( [x,y,...args] = [] ) {
 foo( [1,2,3] );
 ```
 
-Do you spot the `[ .. ]` brackets around the parameter list now? This is called array parameter destructuring.
+你看到`[ .. ]`参数列表的括号了吗？这称为数组参数解构。
 
-In this example, destructuring tells the engine that an array is expected in this assignment position (aka parameter). The pattern says to take the first value of that array and assign to a local parameter variable called `x`, the second to `y`, and whatever is left is *gathered* into `args`.
+在这个例子中，解构函数告诉引擎在这个分配位置需要一个数组。该模式表示取数组的第一个值并将其赋给名为“x”的局部参数变量，将第二个值赋给“y”，剩下的值将赋给“args”。
 
-### The Importance of Declarative Style
+### 声明风格的重要性
 
-Considering the destructured `foo(..)` we just looked at, we could instead have processed the parameters manually:
+思考下我们刚才被解构的“foo（…）”，我们可以手动处理参数：
 
 ```js
 function foo(params) {
@@ -297,46 +294,20 @@ function foo(params) {
     // ..
 }
 ```
+但在这里，我们强调一个我们在[第1章](ch1.md/#readability)中提到的原则：声明性代码比命令式代码更有效地通信。
 
-But here we highlight a principle we only briefly introduced in [Chapter 1](ch1.md/#readability): declarative code communicates more effectively than imperative code.
+声明性代码（例如，前一个“foo（…）”代码段中的解构函数，或“…”运算符用法）将重点放在代码的结果上。
 
-Declarative code (for example, the destructuring in the former `foo(..)` snippet, or the `...` operator usages) focuses on what the outcome of a piece of code should be.
+命令式代码（如后一段中的手动处理的函数）更关注如何获得结果。如果你以后读到这样的命令式代码，你必须关注执行所有的代码，以理解期望的结果。变得在那里被“编码”，很容易被细节所模糊。
 
-Imperative code (such as the manual assignments in the latter snippet) focuses more on how to get the outcome. If you later read such imperative code, you have to mentally execute all of it to understand the desired outcome. The outcome is *coded* there, but it's not as clear because it's clouded by the details of *how* we get there.
+前面的“foo（…）”被认为更具可读性，因为解构的方法隐藏了不必要的参数输入的细节；读者可以自由地只关注处理这些参数。这显然是最重要的关注点，所以读者应该集中精力来最全面地理解代码。
 
-The earlier `foo(..)` is regarded as more readable, because the destructuring hides the unnecessary details of *how* to manage the parameter inputs; the reader is free to focus only on *what* we will do with those parameters. That's clearly the most important concern, so it's what the reader should be focused on to understand the code most completely.
+无论我们使用的语言和库/框架的允许程度怎样，只要可能，**我们都应该努力实现声明性、自解释的代码。**
 
-Wherever possible, and to whatever degrees our language and our libraries/frameworks will let us, **we should be striving for declarative, self-explanatory code.**
 
-## Named Arguments
+## 命名参数
 
-Just as we can destructure array parameters, we can destructure object parameters:
-
-```js
-function foo( {x,y} = {} ) {
-    console.log( x, y );
-}
-
-foo( {
-    y: 3
-} );                    // undefined 3
-```
-
-We pass in an object as the single argument, and it's destructured into two separate parameter variables `x` and `y`, which are assigned the values of those corresponding property names from the object passed in. It didn't matter that the `x` property wasn't on the object; it just ended up as a variable with `undefined` like you'd expect.
-
-But the part of parameter object destructuring I want you to pay attention to is the object being passed into `foo(..)`.
-
-With a normal call-site like `foo(undefined,3)`, position is used to map from argument to parameter; we put the `3` in the second position to get it assigned to a `y` parameter. But at this new kind of call-site where parameter destructuring is involved, a simple object-property indicates which parameter (`y`) the argument value `3` should be assigned to.
-
-We didn't have to account for `x` in *that* call-site because in effect we didn't care about `x`. We just omitted it, instead of having to do something distracting like passing `undefined` as a positional placeholder.
-
-Some languages have an explicit feature for this: named arguments. In other words, at the call-site, labeling an input value to indicate which parameter it maps to. JavaScript doesn't have named arguments, but parameter object destructuring is the next best thing.
-
-Another FP-related benefit of using an object destructuring to pass in potentially multiple arguments is that a function that only takes one parameter (the object) is much easier to compose with another function's single output. Much more on that in [Chapter 4](ch4.md).
-
-### Unordered Parameters
-
-Another key benefit is that named arguments, by virtue of being specified as object properties, are not fundamentally ordered. That means we can specify inputs in whatever order we want:
+正如我们可以解构数组参数一样，我们也可以解构对象参数：
 
 ```js
 function foo( {x,y} = {} ) {
@@ -348,11 +319,37 @@ foo( {
 } );                    // undefined 3
 ```
 
-We're skipping the `x` parameter by simply omitting it. Or we could specify an `x` argument if we cared to, even if we listed it after `y` in the object literal. The call-site is no longer cluttered by ordered-placeholders like `undefined` to skip a parameter.
+我们将一个对象作为单个参数传入，它被分解为两个单独的参数变量“x”和“y”，它们从传入的对象中分配相应属性名的值。“x”属性不在对象上并不重要；它只是像您所期望的那样，以一个带有“undefined”的变量结束。
 
-Named arguments are much more flexible, and attractive from a readability perspective, especially when the function in question can take three, four, or more inputs.
+但是我希望您注意的是,参数对象解构的一部分对象被传递到“foo（…）”。
 
-**Tip:** If this style of function arguments seems useful or interesting to you, check out coverage of my [FPO library in Appendix C](apC.md/#bonus-fpo).
+对于“foo（undefined，3）”这样的普通调用，位置表明了如何映射到函数的参数上；我们将“3”放在第二个位置，以将其分配给“y”参数。但是在参数解构的这种新的调用上，一个简单的对象参数值“3”对应分配给哪个参数（`Y`）。
+
+我们不用解释那个调用的“x”，因为我们不关心“x”的使用。我们可以省略它，就不必做一些分散注意力的事情，比如将“undefined”作为位置占位符传递。
+
+有些语言有一个明确的特性：命名参数。换句话说，在调用中，标记输入值以指示它映射到哪个参数。javascript没有命名参数，但参数对象解构是下一个最好的方法。
+
+使用对象析构函数传递潜在多个参数的方法对函数式编程的好处是，只接受一个参数的函数更容易与另一个函数的单个输出组合。在[第4章](ch4.md)中有阐述的更详细。
+
+### 无序参数
+
+另一个重要的好处是，命名参数由于被指定为对象属性，所以没有从根本上进行排序。这意味着我们可以按照我们想要的任何顺序输入：
+
+```js
+function foo( {x,y} = {} ) {
+    console.log( x, y );
+}
+
+foo( {
+    y: 3
+} );                    // undefined 3
+```
+
+我们只是简单地省略了'x'参数。当然我们也可以指定一个'x'参数，可以放在'y'的后面。这样调用的时候不用考虑x为“undefined”的有序占位符而忽略了参数。
+
+从可读性的角度来看，命名参数更灵活，更具吸引力，尤其是当相关函数可以接受三个、四个或更多输入时。
+
+**提示：**如果这种类型的函数参数对您有用或感兴趣，请查看 [附录C的函数式编程对象](apC.md/#bonus-fpo)。
 
 ## Function Output
 
