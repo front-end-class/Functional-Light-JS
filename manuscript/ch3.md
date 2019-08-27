@@ -1,19 +1,18 @@
-# Functional-Light JavaScript
-# Chapter 3: Managing Function Inputs
+# 章节3：管理函数的输入
 
-[Chapter 2](ch2.md) explored the core nature of JS `function`s, and laid the foundation for what makes a `function` an FP *function*. But to leverage the full power of FP, we also need patterns and practices for manipulating functions to shift and adjust their interactions -- to bend them to our will.
+[第2章](ch2.md)探讨了JS函数的核心性质，并为函数以及“FP函数”奠定了基础。但是，为了充分利用函数编程的力量，我们还需要模式和实践来操纵函数来改变和调整它们的交互——使它们按我们的意愿走。
 
-Specifically, our attention for this chapter will be on the parameter inputs of functions. As you bring functions of all different shapes together in your programs, you'll quickly face incompatibilities in the number/order/type of inputs, as well as the need to specify some inputs at different times than others.
+具体来说，我们这一章将集中在函数的参数输入上。当您将所有不同形状的函数放在一起时，您将很快面临输入的数量/顺序/类型的不兼容性，以及需要在不同的时间指定某些输入
 
-As a matter of fact, for stylistic purposes of readability, sometimes you'll want to define functions in a way that hides their inputs entirely!
+事实上，出于可读性的风格考虑，有时您需要以完全隐藏其输入的方式定义函数!
 
-These kinds of techniques are absolutely essential to making functions truly *function*-al.
+这些技术对于使函数真正的*function*是绝对必要的。
 
-## All for One
+## 多对一
 
-Imagine you're passing a function to a utility, where the utility will send multiple arguments to that function. But you may only want the function to receive a single argument.
+假设您将一个函数传递给一个实用程序，实用程序将向该函数发送多个参数。但是您可能只希望函数接收单个参数。
 
-We can design a simple helper that wraps a function call to ensure only one argument will pass through. Since this is effectively enforcing that a function is treated as unary, let's name it as such:
+我们可以设计一个简单的助手来包装一个函数调用，以确保只传递一个参数。由于这有效地强制将函数视为一元函数，我们将其命名为:
 
 <a name="unary"></a>
 
@@ -24,8 +23,7 @@ function unary(fn) {
     };
 }
 ```
-
-Many FPers tend to prefer the shorter `=>` arrow function syntax for such code (see [Chapter 2, "Functions without `function`"](ch2.md/#functions-without-function)), such as:
+对于这样的代码，许多函数编程使用者倾向于使用更短的' => '箭头函数语法(参见[第2章，“没有function定义的函数”](ch2.md/#functions-without-function))，例如:
 
 ```js
 var unary =
@@ -34,20 +32,20 @@ var unary =
             fn( arg );
 ```
 
-**Note:** No question this is more terse, sparse even. But I personally feel that whatever it may gain in symmetry with the mathematical notation, it loses more in overall readability with the functions all being anonymous, and by obscuring the scope boundaries, making deciphering closure a little more cryptic.
+**注意:**毫无疑问，这更简洁，甚至稀疏。但我个人觉得，无论它在数学符号的对称性上获得了什么，它在整体可读性上损失得更多，因为所有函数都是匿名的，而且模糊了范围边界，使得解密闭包变得更加神秘。
 
-A commonly cited example for using `unary(..)` is with the `map(..)` utility (see [Chapter 9, "Map"](ch9.md/#map)) and `parseInt(..)`. `map(..)` calls a mapper function for each item in a list, and each time it invokes the mapper function, it passes in three arguments: `value`, `idx`, `arr`.
+使用“unary(..)”的一个常见例子是使用“map(..)”实用程序(参见[章节 9，“map函数”](ch9.md/#map))和“parseInt(..)”。map(..)为列表中的每一项调用一个mapper函数，每次调用mapper函数时，都会传入三个参数:“value”、“idx”、“arr”。
 
-That's usually not a big deal, unless you're trying to use something as a mapper function that will behave incorrectly if it's passed too many arguments. Consider:
+这通常没什么大不了的，除非您试图使用某个东西作为映射函数，如果它传递了太多参数，那么它的行为就会不正确。
+想一想:
 
 ```js
 ["1","2","3"].map( parseInt );
 // [1,NaN,NaN]
 ```
+对于“parseInt(str,radix)”，很明显，当“map(..)”在第二个参数位置传递“index”时，它被“parseInt(..)”解释为进制“基数”，这是我们不想要的。
 
-For the signature `parseInt(str,radix)`, it's clear that when `map(..)` passes `index` in the second argument position, it's interpreted by `parseInt(..)` as the `radix`, which we don't want.
-
-`unary(..)` creates a function that will ignore all but the first argument passed to it, meaning the passed-in `index` is never received by `parseInt(..)` and mistaken as the `radix`:
+' unary(..) '创建一个函数，该函数将忽略传递给它的除第一个参数外的所有参数，这意味着传入的' index '不会被' parseInt(..) '接收，并被误认为'基数':
 
 <a name="mapunary"></a>
 
@@ -56,24 +54,24 @@ For the signature `parseInt(str,radix)`, it's clear that when `map(..)` passes `
 // [1,2,3]
 ```
 
-### One on One
+### 一对一
 
-Speaking of functions with only one argument, another common base utility in the FP toolbelt is a function that takes one argument and does nothing but return the value untouched:
+说到只有一个参数的函数，函数式编程工具库中的另一个公共基础实用程序是一个函数，它接受一个参数，只返回未触及的值：
 
 ```js
 function identity(v) {
     return v;
 }
 
-// or the ES6 => arrow form
+// 或者使用ES6箭头函数
 var identity =
     v =>
         v;
 ```
 
-This utility looks so simple as to hardly be useful. But even simple functions can be helpful in the world of FP. Like they say in acting: there are no small parts, only small actors.
+这个实用程序看起来非常简单，几乎没有什么用处。但是，即使是简单的函数，在函数式编程的世界中也是有用的。就像他们在表演中说的:没有小角色，只有小演员。
 
-For example, imagine you'd like to split up a string using a regular expression, but the resulting array may have some empty values in it. To discard those, we can use JS's `filter(..)` array operation (see [Chapter 9, "Filter"](ch9.md/#filter)) with `identity(..)` as the predicate:
+例如，假设您想使用正则表达式拆分一个字符串，但是结果数组中可能有一些空值。为了抛弃这些，我们可以使用JS的'filter(..) '数组操作(参见[章节 9, "filter函数"](ch9.md/#filter))和' identity(..) '作为参数回调:
 
 ```js
 var words = "   Now is the time for all...  ".split( /\s|\b/ );
@@ -83,12 +81,11 @@ words;
 words.filter( identity );
 // ["Now","is","the","time","for","all","..."]
 ```
+因为' identity(..) '只返回传递给它的值，JS强制每个值要么为' true '要么为' false '，这决定了是否保留或排除最后数组中的每个值。
 
-Because `identity(..)` simply returns the value passed to it, JS coerces each value into either `true` or `false`, and that determines whether to keep or exclude each value in the final array.
+提示：在前面的例子中，可以用作谓词的另一个一元函数是JS内置的“Boolean(..)”函数，它显式地强制一个值为“true”或“false”。
 
-**Tip:** Another unary function that can be used as the predicate in the previous example is JS's built-in `Boolean(..)` function, which explicitly coerces a value to `true` or `false`.
-
-Another example of using `identity(..)` is as a default function in place of a transformation:
+使用' identity(..) '的另一个例子是作为默认函数代替转换:
 
 ```js
 function output(msg,formatFn = identity) {
@@ -103,29 +100,27 @@ function upper(txt) {
 output( "Hello World", upper );     // HELLO WORLD
 output( "Hello World" );            // Hello World
 ```
+您还可以看到' identity(..) '用作' map(..) '调用的默认转换函数，或作为函数列表的' reduce(..) '中的初始值;这两个实用程序都将在[第9章](ch9.md)中讨论。
 
-You also may see `identity(..)` used as a default transformation function for `map(..)` calls or as the initial value in a `reduce(..)` of a list of functions; both of these utilities will be covered in [Chapter 9](ch9.md).
+### 不可更改的
 
-### Unchanging One
-
-Certain APIs don't let you pass a value directly into a method, but require you to pass in a function, even if that function literally just returns the value. One such API is the `then(..)` method on JS Promises:
+某些API不允许将值直接传递给方法，但要求传递函数，即使该函数实际上只是返回值。JS上的“then(..)”方法就是这样一个API：
 
 ```js
-// doesn't work:
+// 不起作用:
 p1.then( foo ).then( p2 ).then( bar );
 
-// instead:
+// 替换成:
 p1.then( foo ).then( function(){ return p2; } ).then( bar );
 ```
 
-Many claim that ES6 `=>` arrow functions are the best "solution":
+许多人声称ES6`=>`箭头函数是最好的“解决方案”：
 
 ```js
 p1.then( foo ).then( () => p2 ).then( bar );
 ```
 
-But there's an FP utility that's more well suited for the task:
-
+但是有一个fp实用程序更适合此任务：
 ```js
 function constant(v) {
     return function value(){
@@ -140,27 +135,27 @@ var constant =
             v;
 ```
 
-With this tidy little FP utility, we can solve our `then(..)` annoyance properly:
+有了这个整洁的小fp工具，我们可以正确地解决“then（…）”的烦恼：
 
 ```js
 p1.then( foo ).then( constant( p2 ) ).then( bar );
 ```
 
-**Warning:** Although the `() => p2` arrow function version is shorter than `constant(p2)`, I would encourage you to resist the temptation to use it. The arrow function is returning a value from outside of itself, which is a bit worse from the FP perspective. We'll cover the pitfalls of such actions later in the book (see [Chapter 5](ch5.md)).
+**警告：**虽然`() =>p2`箭头函数版本比`constant(p2)`简短，但我建议你不要这么使用。arrow函数从自身外部返回一个值，从fp的角度来看，这有点糟糕。我们稍后将在本书中讨论这些行为的陷阱（见[第5章](ch5.md)）。
 
-## Adapting Arguments to Parameters
+## 使参数适应参数
 
-There are a variety of patterns and tricks we can use to adapt a function's signature to match the kinds of arguments we want to provide to it.
+我们可以使用多种模式和技巧来调整函数的签名，以匹配我们希望为其提供的参数类型。
 
-Recall [this function signature from Chapter 2](ch2.md/#user-content-funcparamdestr) which highlights using array parameter destructuring:
+回想一下[第2章中的这个函数签名](ch2.md/user content funcparamdestr)，它强调使用数组参数解构：
 
 ```js
 function foo( [x,y,...args] = [] ) {
 ```
 
-This pattern is handy if an array will be passed in but you want to treat its contents as individual parameters. `foo(..)` is thus technically unary -- when it's executed, only one argument (an array) will be passed to it. But inside the function, you get to address different inputs (`x`, `y`, etc) individually.
+如果传入数组，但希望将其内容视为单个参数，则此模式很方便。`因此，foo(..)`在技术上是一元的——当它被执行时，只有一个参数（数组）将被传递给它。但是在函数内部，您可以分别处理不同的输入（`x`，`y`，等等）。
 
-However, sometimes you won't have the ability to change the declaration of the function to use array parameter destructuring. For example, imagine these functions:
+但是，有时您无法将函数的声明更改为使用数组参数析构化。例如，假设这些函数：
 
 ```js
 function foo(x,y) {
@@ -171,16 +166,15 @@ function bar(fn) {
     fn( [ 3, 9 ] );
 }
 
-bar( foo );         // fails
+bar( foo );         // 失败
 ```
+你看出`bar(foo)`失败的原因了吗？
 
-Do you spot why `bar(foo)` fails?
+数组`[3,9]`作为单个值发送到'fn(..)`，但'foo(..)`需要分别为'x'和'y'。如果我们能把“foo(..)”的声明改为“function foo([x，y])”，我们就可以了。或者，如果我们可以更改“bar(…)”的行为，使调用成为“fn(…[3,9])”，则值“3”和“9”将分别传入。
 
-The array `[3,9]` is sent in as a single value to `fn(..)`, but `foo(..)` expects `x` and `y` separately. If we could change the declaration of `foo(..)` to be `function foo([x,y]) { ..`, we'd be fine. Or, if we could change the behavior of `bar(..)` to make the call as `fn(...[3,9])`, the values `3` and `9` would be passed in individually.
+有时，当您有两个函数以这种方式不兼容时，您将无法更改它们的声明/定义。那么，你怎么能同时使用它们呢？
 
-There will be occasions when you have two functions that are incompatible in this way, and you won't be able to change their declarations/definitions. So, how can you use them together?
-
-We can define a helper to adapt a function so that it spreads out a single received array as its individual arguments:
+我们可以定义一个中间函数来调整一个函数，这样它就会展开一个单独的接收数组作为它的参数:
 
 <a name="spreadargs"></a>
 
@@ -191,24 +185,24 @@ function spreadArgs(fn) {
     };
 }
 
-// or the ES6 => arrow form
+// 或者使用ES6箭头函数
 var spreadArgs =
     fn =>
         argsArr =>
             fn( ...argsArr );
 ```
 
-**Note:** I called this helper `spreadArgs(..)`, but in libraries like Ramda it's commonly called `apply(..)`.
+**注意:**我将这个中间函数称为“spreadArgs(..)”，但是在像Ramda这样的库中，它通常被称为“apply(..)”。
 
-Now we can use `spreadArgs(..)` to adapt `foo(..)` to work as the proper input to `bar(..)`:
+现在我们可以使用“spreadArgs(..)”来调整“foo(..)”作为“bar(..)”的正确输入:
 
 ```js
 bar( spreadArgs( foo ) );           // 12
 ```
 
-It won't seem clear yet why these occasions arise, but you will see them often. Essentially, `spreadArgs(..)` allows us to define functions that `return` multiple values via an array, but still have those multiple values treated independently as inputs to another function.
+现在还不清楚为什么会出现这种情况，但你会经常看到。实际上，“spreadArgs(..)”允许我们定义一些函数，这些函数通过数组“返回”多个值，但仍然将这些值作为另一个函数的输入单独处理。
 
-While we're talking about a `spreadArgs(..)` utility, let's also define a utility to handle the opposite action:
+当我们讨论一个“spreadArgs(..)”工具时，让我们也定义一个工具来处理相反的操作:
 
 ```js
 function gatherArgs(fn) {
@@ -217,16 +211,16 @@ function gatherArgs(fn) {
     };
 }
 
-// or the ES6 => arrow form
+// 或者使用ES6箭头函数
 var gatherArgs =
     fn =>
         (...argsArr) =>
             fn( argsArr );
 ```
 
-**Note:** In Ramda, this utility is referred to as `unapply(..)`, being that it's the opposite of `apply(..)`. I think the "spread"/"gather" terminology is a little more descriptive for what's going on.
+**注意:**在Ramda中，这个实用程序被称为“unapply(..)”，因为它与“apply(..)”相反。我认为用“扩展”/“收集”的术语更能描述这个。
 
-We can use this utility to gather individual arguments into a single array, perhaps because we want to adapt a function with array parameter destructuring to another utility that passes arguments separately. We will [cover `reduce(..)` more fully in Chapter 9](ch9.md/#reduce); in short, it repeatedly calls its reducer function with two individual parameters, which we can now *gather* together:
+我们可以使用这个实用程序将单个参数收集到一个数组中，这可能是因为我们希望将一个具有数组参数析构的函数调整为另一个单独传递参数的实用程序。我们将[在第9章更全面地讨论' reduce(..) '](ch9.md/#reduce);简而言之，它用两个单独的参数反复调用它的减速函数，我们现在可以将它们*集合*在一起:
 
 ```js
 function combineFirstTwo([ v1, v2 ]) {
@@ -237,11 +231,11 @@ function combineFirstTwo([ v1, v2 ]) {
 // 15
 ```
 
-## Some Now, Some Later
+## 现在与稍后的调用
 
-If a function takes multiple arguments, you may want to specify some of those up front and leave the rest to be specified later.
+如果一个函数接受多个参数，您可能希望预先指定其中一些参数，其余的参数留待以后指定。
 
-Consider this function:
+思考下面这个函数:
 
 ```js
 function ajax(url,data,callback) {
@@ -249,11 +243,11 @@ function ajax(url,data,callback) {
 }
 ```
 
-Let's imagine you'd like to set up several API calls where the URLs are known up front, but the data and the callback to handle the response won't be known until later.
+假设您想设置几个API调用，其中url在前面是已知的，但是处理响应的数据和回调要到稍后才会知道。
 
-Of course, you can just defer making the `ajax(..)` call until all the bits are known, and refer to some global constant for the URL at that time. But another way is to create a function reference that already has the `url` argument preset.
+当然，您可以推迟执行' ajax(..) '调用，直到所有的位都被知道，并在那个时候引用URL的某个全局常量。但另一种方法是创建一个函数引用，它已经预先设置了“url”参数。
 
-What we're going to do is make a new function that still calls `ajax(..)` under the covers, and it manually sets the first argument to the API URL you care about, while waiting to accept the other two arguments later:
+我们要做的是创建一个新函数，它仍然调用' ajax(..) '，并手动将第一个参数设置API URL，同时等待稍后接受其他两个参数:
 
 ```js
 function getPerson(data,cb) {
@@ -265,7 +259,7 @@ function getOrder(data,cb) {
 }
 ```
 
-Manually specifying these function call wrappers is certainly possible, but it may get quite tedious, especially if there will also be variations with different arguments preset, like:
+手动指定这些函数的封装当然是可能的，但它可能会变得相当乏味，特别是如果还会有不同的参数预置变化，如:
 
 ```js
 function getCurrentUser(cb) {
@@ -273,15 +267,15 @@ function getCurrentUser(cb) {
 }
 ```
 
-One practice an FPer gets very used to is looking for patterns where we do the same sorts of things repeatedly, and trying to turn those actions into generic reusable utilities. As a matter of fact, I'm sure that's already the instinct for many of you readers, so that's not uniquely an FP thing. But it's unquestionably important for FP.
+函数编程人员非常习惯的一种实践是寻找重复执行相同类型的操作的模式，并尝试将这些操作转换为通用的可重用实用程序。事实上，我相信这已经是你们许多读者的本能，所以这并不是函数式编程所独有的。但毫无疑问，这对函数式编程很重要。
 
-To conceive such a utility for argument presetting, let's examine conceptually what's going on, not just looking at the manual implementations shown here.
+要构思这样一个用于参数预置的实用程序，让我们从概念上研究一下发生了什么，而不只是查看这里显示的手动实现。
 
-One way to articulate what's going on is that the `getOrder(data,cb)` function is a *partial application* of the `ajax(url,data,cb)` function. This terminology comes from the notion that arguments are *applied* to parameters at the function call-site. And as you can see, we're only applying some of the arguments up front -- specifically, the argument for the `url` parameter -- while leaving the rest to be applied later.
+一种明确的方法是“getOrder(data,cb)”函数是“ajax(url,data,cb)”函数的“部分应用程序”。这个术语来自于这样一个概念:参数被“应用”到函数调用站点的参数上。正如您所看到的，我们只在前面应用了一些参数——具体地说，就是“url”参数的参数——其余的参数将在稍后应用。
 
-To be a tiny bit more formal about this pattern, partial application is strictly a reduction in a function's arity; remember, that's the number of expected parameter inputs. We reduced the original `ajax(..)` function's arity from 3 to 2 for the `getOrder(..)` function.
+更正式地说，部分应用严格地减少了函数的特性;记住，这是期望参数输入的个数。对于“getOrder(..)”函数，我们将原来的“ajax(..)”函数的特性从3减少到2。
 
-Let's define a `partial(..)` utility:
+定义一个`partial(..)`工具函数：
 
 ```js
 function partial(fn,...presetArgs) {
@@ -290,26 +284,26 @@ function partial(fn,...presetArgs) {
     };
 }
 
-// or the ES6 => arrow form
+// 或使用ES6箭头函数
 var partial =
     (fn,...presetArgs) =>
         (...laterArgs) =>
             fn( ...presetArgs, ...laterArgs );
 ```
 
-**Tip:** Don't just take this snippet at face value. Pause for a few moments to digest what's going on with this utility. Make sure you really *get it*.
+**提示:**不要只看这个片段的表面价值。暂停几分钟，消化一下这个实用程序到底发生了什么。确保你真的明白了。
 
-The `partial(..)` function takes an `fn` for which function we are partially applying. Then, any subsequent arguments passed in are gathered into the `presetArgs` array and saved for later.
+' partial(..) '函数接受一个' fn '函数，我们对该函数进行了部分应用。然后，传入的任何后续参数都被收集到“presetArgs”数组中，并保存到后面。
 
-A new inner function (called `partiallyApplied(..)` just for clarity) is created and `return`ed; the inner function's own arguments are gathered into an array called `laterArgs`.
+创建一个新的内部函数(称为' partiallyApplied(..) '，只是为了清晰起见)并返回;内部函数自身的参数被收集到一个名为“laterArgs”的数组中。
 
-Notice the references to `fn` and `presetArgs` inside this inner function? How does that work? After `partial(..)` finishes running, how does the inner function keep being able to access `fn` and `presetArgs`? If you answered **closure**, you're right on track! The inner function `partiallyApplied(..)` closes over both the `fn` and `presetArgs` variables so it can keep accessing them later, no matter where the function runs. This is why understanding closure is critical!
+注意到内部函数中对' fn '和' presetArgs '的引用了吗?这是怎么回事?在' partial(..) '运行完成后，内部函数如何能够继续访问' fn '和' presetArgs ' ?如果您回答的是**闭包**，那么你是正确的!内部函数“partiallyApplied(..)”对“fn”和“presetArgs”变量都关闭，无论函数运行在何处，以后都可以继续访问它们，。这就是为什么理解闭包是至关重要的!
 
-When the `partiallyApplied(..)` function is later executed somewhere else in your program, it uses the closed over `fn` to execute the original function, first providing any of the (closed over) `presetArgs` partial application arguments, then any further `laterArgs` arguments.
+当“partiallyapplied(..)”函数在程序中的其他地方执行时，它使用关闭的“fn”来执行原始函数，首先提供任何“presetargs”部分应用程序参数，然后再提供其他“laterargs”参数。
 
-If any of that was confusing, stop and go re-read it. Trust me, you'll be glad you did as we get further into the text.
+如果有什么让人困惑的话，停下来再读一遍。相信我，你会很高兴我们能更深入地了解。
 
-Let's now use the `partial(..)` utility to make those earlier partially applied functions:
+现在，让我们使用' partial(..) '函数来实现前面那些部分应用的函数:
 
 ```js
 var getPerson = partial( ajax, "http://some.api/person" );
@@ -317,7 +311,7 @@ var getPerson = partial( ajax, "http://some.api/person" );
 var getOrder = partial( ajax, "http://some.api/order" );
 ```
 
-Take a moment to consider the shape/internals of `getPerson(..)`. It will look sorta like this:
+花点时间考虑一下“getPerson(..)”的形状/内部结构。它看起来是这样的:
 
 ```js
 var getPerson = function partiallyApplied(...laterArgs) {
@@ -325,28 +319,28 @@ var getPerson = function partiallyApplied(...laterArgs) {
 };
 ```
 
-The same will be true of `getOrder(..)`. But what about `getCurrentUser(..)`?
+getOrder(..)也是如此。但是' getCurrentUser(..) '呢?
 
 ```js
-// version 1
+// 版本 1
 var getCurrentUser = partial(
     ajax,
     "http://some.api/person",
     { user: CURRENT_USER_ID }
 );
 
-// version 2
+// 版本 2
 var getCurrentUser = partial( getPerson, { user: CURRENT_USER_ID } );
 ```
 
-We can either define `getCurrentUser(..)` with both the `url` and `data` arguments specified directly (version 1), or define `getCurrentUser(..)` as a partial application of the `getPerson(..)` partial application, specifying only the additional `data` argument (version 2).
+我们可以使用直接指定的“url”和“data”参数定义“getCurrentUser(..)”(版本1)，或者将“getCurrentUser(..)”定义为“getPerson(..)”部分应用程序的部分应用程序，只指定附加的“data”参数(版本2)。
 
-Version 2 is a little cleaner to express because it reuses something already defined. As such, I think it fits a little closer to the spirit of FP.
+版本2更便于表达，因为它重用了已经定义的内容。因此，我认为它更符合函数式编程的概念。
 
-Just to make sure we understand how these two versions will work under the covers, they look respectively kinda like:
+为了确保我们理解这两个版本在背后是如何工作的，它们看起来分别有点像:
 
 ```js
-// version 1
+// 版本 1
 var getCurrentUser = function partiallyApplied(...laterArgs) {
     return ajax(
         "http://some.api/person",
@@ -355,7 +349,7 @@ var getCurrentUser = function partiallyApplied(...laterArgs) {
     );
 };
 
-// version 2
+// 版本 2
 var getCurrentUser = function outerPartiallyApplied(...outerLaterArgs){
     var getPerson = function innerPartiallyApplied(...innerLaterArgs){
         return ajax( "http://some.api/person", ...innerLaterArgs );
@@ -365,11 +359,11 @@ var getCurrentUser = function outerPartiallyApplied(...outerLaterArgs){
 }
 ```
 
-Again, stop and re-read those code snippets to make sure you understand what's going on there.
+同样，停止并重新阅读这些代码片段，以确保您理解其中的内容。
 
-**Note:** Version 2 has an extra layer of function wrapping involved. That may smell strange and unnecessary, but this is just one of those things in FP that you'll want to get really comfortable with. We'll be wrapping many layers of functions onto each other as we progress through the text. Remember, this is *function*al programming!
+**注意:** 版本 2包含一个额外的函数包装层。这可能听起来很奇怪，也没有必要，但这只是函数编程中你想要真正熟悉的东西之一。在阅读文本的过程中，我们将把许多层函数相互包装起来。记住，这是*函数*编程!
 
-Let's take a look at another example of the usefulness of partial application. Consider an `add(..)` function which takes two arguments and adds them together:
+让我们看一下部分应用程序的另一个有用的例子。考虑一个' add(..) '函数，它接受两个参数并将它们相加:
 
 ```js
 function add(x,y) {
@@ -377,7 +371,7 @@ function add(x,y) {
 }
 ```
 
-Now imagine we'd like take a list of numbers and add a certain number to each of them. We'll use the `map(..)` utility (see [Chapter 9, "Map"](ch9.md/#map)) built into JS arrays:
+现在假设我们想要一个数字列表，并在每个列表中添加一个特定的数字。我们将使用内置在JS数组中的 `map(..)`(see [Chapter 9, "Map"](ch9.md/#map)) ：
 
 ```js
 [1,2,3,4,5].map( function adder(val){
@@ -386,36 +380,36 @@ Now imagine we'd like take a list of numbers and add a certain number to each of
 // [4,5,6,7,8]
 ```
 
-The reason we can't pass `add(..)` directly to `map(..)` is because the signature of `add(..)` doesn't match the mapping function that `map(..)` expects. That's where partial application can help us: we can adapt the signature of `add(..)` to something that will match:
+我们不能直接将' add(..) '传递给' map(..) '的原因是' add(..) '的签名与' map(..) '的映射函数不匹配。这就是部分应用程序可以帮助我们的地方:我们可以修改`add(..)`的签名，使之匹配:
 
 ```js
 [1,2,3,4,5].map( partial( add, 3 ) );
 // [4,5,6,7,8]
 ```
 
-The `partial(add,3)` call produces a new unary function which is expecting only one more argument.
+`partial(add,3)`调用生成一个新的一元函数，该函数只需要一个参数。
 
-The `map(..)` utility will loop through the array (`[1,2,3,4,5]`) and repeatedly call this unary function, once for each of those values, respectively. So, the calls made will effectively be `add(3,1)`, `add(3,2)`, `add(3,3)`, `add(3,4)`, and `add(3,5)`. The array of those results is `[4,5,6,7,8]`.
+`map(..)`将循环遍历数组(`[1,2,3,4,5]`)，并分别为每个值重复调用这个一元函数一次。因此,有效地调用`add(3,1)`, `add(3,2)`, `add(3,3)`, `add(3,4)`, and `add(3,5)`，产生结果的数组是'[4,5,6,7,8]'
 
-### `bind(..)`
+### `bind(..)函数`
 
-JavaScript functions all have a built-in utility called `bind(..)`. It has two capabilities: presetting the `this` context and partially applying arguments.
+javascript函数都有一个名为`bind(..)`的内置函数。它有两个功能：预设`this`上下文和应用参数。
 
-I think it's incredibly misguided to conflate these two capabilities in one utility. Sometimes you'll want to hard-bind the `this` context and not partially apply arguments. Other times you'll want to partially apply arguments but not care about `this` binding at all. I have never needed both at the same time.
+我认为把这两种功能混为一谈是非常错误的。有时您需要绑定`this`上下文，而不是应用参数。其他时候，您可能希望作为应用参数，根本不关心`this`绑定。我是从来没有同时需要这两者的。
 
-The latter scenario (partial application without setting `this` context) is awkward because you have to pass an ignorable placeholder for the `this`-binding argument (the first one), usually `null`.
+后一种方案比较尴尬（不设置`this`上下文的应用函数），因为必须为 `this`绑定参数（第一个）传递一个可忽略的占位符，通常为“null”。
 
-Consider:
+想一想:
 
 ```js
 var getPerson = ajax.bind( null, "http://some.api/person" );
 ```
 
-That `null` just bugs me to no end. Despite this *this* annoyance, it's mildly convenient that JS has a built-in utility for partial application. However, most FP programmers prefer using the dedicated `partial(..)` utility in their chosen FP library.
+那个`null` 让人心烦。JS为部分应用程序提供了一个内置的实用程序，这还是比较方便的。然而，大多数函数编程程序员更喜欢在他们选择的函数编程库中使用专用的`partial(..)`实用程序。
 
-### Reversing Arguments
+### 反转参数
 
-Recall that the signature for our Ajax function is: `ajax( url, data, cb )`. What if we wanted to partially apply the `cb` but wait to specify `data` and `url` later? We could create a utility that wraps a function to reverse its argument order:
+回想一下，我们的Ajax函数的签名是:`ajax( url, data, cb )`。如果我们想要部分应用 `cb`，但要等到稍后指定`data`和`url`，又该怎么办?我们可以创建一个实用程序来包装一个函数，以逆转其参数顺序:
 
 ```js
 function reverseArgs(fn) {
@@ -424,14 +418,14 @@ function reverseArgs(fn) {
     };
 }
 
-// or the ES6 => arrow form
+// 运用箭头函数
 var reverseArgs =
     fn =>
         (...args) =>
             fn( ...args.reverse() );
 ```
 
-Now we can reverse the order of the `ajax(..)` arguments, so that we can then partially apply from the right rather than the left. To restore the expected order, we'll then reverse the subsequent partially applied function:
+现在我们可以颠倒`ajax(..)`参数的顺序，这样我们就可以从右边而不是左边部分地应用。为了恢复预期的顺序，我们将反转后面部分应用的函数:
 
 ```js
 var cache = {};
