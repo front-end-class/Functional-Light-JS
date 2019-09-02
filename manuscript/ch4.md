@@ -1,41 +1,40 @@
-# Functional-Light JavaScript
-# Chapter 4: Composing Functions
+# 章节 4: 组合函数
 
-By now, I hope you're feeling much more comfortable with what it means to use functions for functional programming.
+到目前为止，我希望您对使用函数进行函数编程的含义感到更舒服。
 
-A functional programmer sees every function in their program like a simple little Lego piece. They recognize the blue 2x2 brick at a glance, and know exactly how it works and what they can do with it. When they begin building a bigger, more complex Lego model, as they need each next piece, they already have an instinct for which of their many spare pieces to grab.
+函数式程序员把程序中的每个函数都看作是一个简单的乐高积木。他们一眼就能认出蓝色的2x2砖块，并且确切地知道它是如何工作的，以及他们可以用它做什么。当他们开始建造一个更大、更复杂的乐高模型时，因为他们需要每一块积木，他们已经有了一种本能，从他们的许多备用积木中找出哪一块来。
 
-But sometimes you take the blue 2x2 brick and the gray 4x1 brick and put them together in a certain way, and you realize, "that's a useful piece that I need often".
+但有时你把蓝色的2x2块和灰色的4x1块以某种方式放在一起，你会意识到，“这是我经常需要的一块有用的砖”。
 
-So now you've come up with a new "piece", a combination of two other pieces, and you can reach for that kind of piece now anytime you need it. It's more effective to recognize and use this compound blue-gray L-brick thing where it's needed than to separately think about assembling the two individual bricks each time.
+所以现在你已经想出了一个新的“片段”，两个其他片段的组合，你现在可以在任何你需要的时候得到这种片段。识别并在需要的地方使用这种蓝灰色的复合l形砖要比每次单独考虑组装两个单独的砖更有效。
 
-Functions come in a variety of shapes and sizes. And we can define a certain combination of them to make a new compound function that will be handy in various parts of the program. This process of using functions together is called composition.
+函数有各种形状和大小。我们可以定义它们的特定组合来创建一个新的复合函数，这个函数在程序的各个部分都很方便。将函数一起使用的过程称为组合。
 
-Composition is how an FPer models the flow of data through the program. In some senses, it's the most foundational concept in all of FP, because without it, you can't declaratively model data and state changes. In other words, everything else in FP would collapse without composition.
+组合是指函数编程人员如何对程序中的数据流建模。从某种意义上说，它是函数编程中最基本的概念，因为没有它，您就不能声明性地对数据和状态更改建模。换句话说，如果没有组分，函数编程中的其他所有东西都会崩溃。
 
-## Output to Input
+## 输出到输入
 
-We've already seen a few examples of composition. For example, our discussion of [`unary(..)` in Chapter 3](ch3.md/#user-content-unary) included this expression: [`[..].map(unary(parseInt))`](ch3.md/#user-content-mapunary). Think about what's happening there.
+我们已经看到了一些合成的例子。例如，我们在第3章中讨论[`unary(..)`](ch3.md/#user-content-unary)时包含了这样一个表达式:[' [..].map(unary(parseInt))](ch3.md/#user-content-mapunary)。想想发生了什么。
 
-To compose two functions together, pass the output of the first function call as the input of the second function call. In `map(unary(parseInt))`, the `unary(parseInt)` call returns a value (a function); that value is directly passed as an argument to `map(..)`, which returns an array.
+要将两个函数组合在一起，请将第一个函数调用的输出作为第二个函数调用的输入。在`map(unary(parseInt))`中，`unary(parseInt)`调用返回一个值(一个函数);该值直接作为参数传递给 `map(..)`，后者返回一个数组。
 
-To take a step back and visualize the conceptual flow of data, consider:
+后退一步考虑并结合可视化数据的概念流:
 
 ```txt
 arrayValue <-- map <-- unary <-- parseInt
 ```
 
-`parseInt` is the input to `unary(..)`. The output of `unary(..)` is the input to `map(..)`. The output of `map(..)` is `arrayValue`. This is the composition of `map(..)` and `unary(..)`.
+`parseInt` 是`unary(..)`的输入值. `unary(..)` 的输出值是`map(..)`的输入值. `map(..)` 的输出值是 `arrayValue`. 这就是 `map(..)` 与 `unary(..)`的组合.
 
-**Note:** The right-to-left orientation here is on purpose, though it may seem strange at this point in your learning. We'll come back to explain that more fully later.
+**注意:**这里的从右到左的方向是有意这样的，尽管在您的学习过程中这一点可能看起来很奇怪。我们稍后会详细解释。
 
-Think of this flow of data like a conveyor belt in a candy factory, where each operation is a step in the process of cooling, cutting, and wrapping a piece of candy. We'll use the candy factory metaphor throughout this chapter to explain what composition is.
+把这个数据流想象成糖果工厂的传送带，每个操作都是冷却、切割和包装糖果过程中的一个步骤。我们将在本章中使用糖果工厂的比喻来解释什么是组合。
 
 <p align="center">
     <img src="images/fig2.png">
 </p>
 
-Let's examine composition in action one step at a time. Consider these two utilities you might have in your program:
+让我们一步一步地研究一下实际的作文。考虑一下您的程序中可能具有的这两个实用程序:
 
 ```js
 function words(str) {
@@ -61,9 +60,9 @@ function unique(list) {
 }
 ```
 
-`words(..)` splits a string into an array of words. `unique(..)` takes a list of words and filters it to not have any repeat words in it.
+`words(..)`将字符串分割成单词数组。`unique(..)`获取一个单词列表，并对其进行筛选，使其不包含任何重复的单词。
 
-To use these two utilities to analyze a string of text:
+要使用这两个实用程序来分析一段文本字符串:
 
 ```js
 var text = "To compose two functions together, pass the \
@@ -79,35 +78,35 @@ wordsUsed;
 // "input","second"]
 ```
 
-We name the array output of `words(..)` as `wordsFound`. The input of `unique(..)` is also an array, so we can pass the `wordsFound` into it.
+我们将`words(..)`的数组输出命名为`wordsFound`。`unique(..)`的输入也是一个数组，因此我们可以将 `wordsFound`传递给它。
 
-Back to the candy factory assembly line: the first machine takes as "input" the melted chocolate, and its "output" is a chunk of formed and cooled chocolate. The next machine a little down the assembly line takes as its "input" the chunk of chocolate, and its "output" is a cut-up piece of chocolate candy. Next, a machine on the line takes small pieces of chocolate candy from the conveyor belt and outputs wrapped candies ready to bag and ship.
+回到糖果工厂的装配线:第一台机器将融化的巧克力作为“输入”，它的“输出”是一块成形并冷却的巧克力。下一台机器沿着装配线向下一点，它的“输入”是一块巧克力，“输出”是一块切碎的巧克力糖。接下来，生产线上的一台机器从传送带上取下小块巧克力糖，并输出包装好的糖果，准备打包运输。
 
 <img src="images/fig3.png" align="right" width="9%" hspace="20">
 
-The candy factory is fairly successful with this process, but as with all businesses, management keeps searching for ways to grow.
+糖果工厂在这一过程中相当成功，但与所有企业一样，管理层一直在寻找增长的途径。
 
-To keep up with demand for more candy production, they decide to take out the conveyor belt contraption and just stack all three machines on top of one another, so that the output valve of one is connected directly to the input valve of the one below it. There's no longer sprawling wasted space where a chunk of chocolate slowly and noisily rumbles down a conveyor belt from the first machine to the second.
+为了满足更多糖果生产的需求，他们决定拿出传送带装置，把三台机器一台台叠起来，其中一台的输出阀直接连接到下一台的输入阀上。再也不会有大块巧克力在传送带上缓慢而嘈杂地从一台机器传到另一台机器的浪费空间了。
 
-This innovation saves a lot of room on the factory floor, so management is happy they'll get to make more candy each day!
+这一创新为工厂节省了很多空间，所以管理层很高兴他们能每天生产更多的糖果!
 
-The code equivalent of this improved candy factory configuration is to skip the intermediate step (the `wordsFound` variable in the earlier snippet), and just use the two function calls together:
+与此改进的糖果生产配置等价的代码是跳过中间步骤(前面代码片段中的`wordsFound`变量)，只使用两个函数调用:
 
 ```js
 var wordsUsed = unique( words( text ) );
 ```
 
-**Note:** Though we typically read the function calls left-to-right -- `unique(..)` and then `words(..)` -- the order of operations will actually be more right-to-left, or inner-to-outer. `words(..)` will run first and then `unique(..)`. Later we'll talk about a pattern that matches the order of execution to our natural left-to-right reading, called `pipe(..)`.
+**注意:**虽然我们通常从左到右读取函数调用`unique(..)`和`words(..)`，但是操作的顺序实际上会从右到左，或者从内到外。首先运行`words(..)`，然后运行`unique(..)`。稍后，我们将讨论一种模式，它将执行顺序与从左到右的自然读取匹配，称为`pipe(..)`。
 
-The stacked machines are working fine, but it's kind of clunky to have the wires hanging out all over the place. The more of these machine-stacks they create, the more cluttered the factory floor gets. And the effort to assemble and maintain all these machine stacks is awfully time intensive.
+堆叠的机器工作得很好，但是到处都挂着电线有点笨重。他们创建的机器栈越多，工厂的地板就越杂乱。组装和维护所有这些机器堆栈的工作非常耗时。
 
 <img src="images/fig4.png" align="left" width="15%" hspace="20">
 
-One morning, an engineer at the candy factory has a great idea. She figures that it'd be much more efficient if she made an outer box to hide all the wires; on the inside, all three of the machines are hooked up together, and on the outside everything is now neat and tidy. On the top of this fancy new machine is a valve to pour in melted chocolate and on the bottom is a valve that spits out wrapped chocolate candies. Brilliant!
+一天早上，糖果厂的一位工程师有了一个好主意。她认为如果她做一个外部盒子来隐藏所有的电线会更有效率;在内部，所有的三个机器都连接在一起，而在外部，一切都是干净整洁的。在这台新机器的顶部是一个阀门，可以将融化的巧克力倒入机器，底部是一个阀门，可以吐出包装好的巧克力糖果。这样太棒了!
 
-This single compound machine is much easier to move around and install wherever the factory needs it. The workers on the factory floor are even happier because they don't need to fidget with buttons and dials on three individual machines anymore; they quickly prefer using the single fancy machine.
+这台单台复合机器更容易移动和安装在工厂需要的任何地方。工厂里的工人们更开心，因为他们不再需要摆弄三台机器上的按钮和刻度盘;他们很快就喜欢用单台花哨的机器。
 
-Relating back to the code: we now realize that the pairing of `words(..)` and `unique(..)` in that specific order of execution (think: compound Lego) is something we could use in several other parts of our application. So, let's define a compound function that combines them:
+与代码相关:我们现在意识到`words(..)` 和 `unique(..)`以特定的执行顺序(想想:复合乐高)的配对可以在应用程序的其他几个部分中使用。所以，让我们定义一个复合函数来组合它们:
 
 ```js
 function uniqueWords(str) {
