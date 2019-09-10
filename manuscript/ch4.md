@@ -250,7 +250,7 @@ function skipShortWords(words) {
 }
 ```
 
-Let's define `biggerWords(..)` that includes `skipShortWords(..)`. The manual composition equivalent is `skipShortWords( unique( words( text ) ) )`, so let's do that with `compose(..)`:
+让我们定义 `biggerWords(..)`，其中包括`skipShortWords(..)`。手动合成相当于`skipShortWords( unique( words( text ) ) )`，所以让我们用`compose(..)`来实现:
 
 ```js
 var text = "To compose two functions together, pass the \
@@ -266,13 +266,13 @@ wordsUsed;
 // "function","input","second"]
 ```
 
-To do something more interesting with composition, let's use [`partialRight(..)`, which we first looked at in Chapter 3](ch3.md/#user-content-partialright). We can build a right-partial application of `compose(..)` itself, pre-specifying the second and third arguments (`unique(..)` and `words(..)`, respectively); we'll call it `filterWords(..)`.
+要对组合做一些更有趣的事情，让我们使用这是我们在第3章中首先看到的[`partialRight(..)`](ch3.md/#user-content-partialright)。我们可以构建一个`compose(..)`本身的函数式编程中局部应用，预先指定第二个和第三个参数(`unique(..)` 和 `words(..)`;我们将其称为`filterWords(..)`。
 
-Then, we can complete the composition multiple times by calling `filterWords(..)`, but with different first-arguments respectively:
+然后，我们可以通过调用`filterWords(..)`多次完成合成，但分别使用不同的第一个参数：
 
 ```js
-// Note: uses a `<= 4` check instead of the `> 4` check
-// that `skipShortWords(..)` uses
+// 注意：使用`<=4'检查而不是`>4'检查
+// `skipShortWords(..)` 使用
 function skipLongWords(list) { /* .. */ }
 
 var filterWords = partialRight( compose, unique, words );
@@ -288,23 +288,23 @@ shorterWords( text );
 // ["to","two","pass","the","of","call","as"]
 ```
 
-Take a moment to consider what the right-partial application on `compose(..)` gives us. It allows us to specify ahead of time the first step(s) of a composition, and then create specialized variations of that composition with different subsequent steps (`biggerWords(..)` and `shorterWords(..)`). This is one of the most powerful tricks of FP!
+花点时间考虑一下`compose(..)`上正确的部分应用程序给了我们什么。它允许我们提前指定构图的第一步，然后用不同的后续步骤（`biggerWords(..)`和`shorterWords(..)`）创建该构图的特殊变体。这是FP最强大的技巧之一！
 
-You can also `curry(..)` a composition instead of partial application, though because of right-to-left ordering, you might more often want to `curry( reverseArgs(compose), ..)` rather than just `curry( compose, ..)` itself.
+您也可以`curry(..)`组合而不是部分应用程序，但是由于从右到左排序，您可能更经常希望`curry( reverseArgs(compose), ..)`而不是仅仅`curry( compose, ..)`本身。
 
-**Note:** Because `curry(..)` (at least [the way we implemented it in Chapter 3](ch3.md/#user-content-curry)) relies on either detecting the arity (`length`) or having it manually specified, and `compose(..)` is a variadic function, you'll need to manually specify the intended arity like `curry(.. , 3)`.
+**注意：**因为`curry(..)` （至少[我们在第3章中实现它的方式](ch3.md/#user-content-curry)）依赖于检测元数（`length`）或手动指定它，并且`compose(..)` 是一个可变函数，所以需要手动指定预期的元素，如 `curry(.. , 3)`。
 
-### Alternative Implementations
+### 替代实施
 
-While you may very well never implement your own `compose(..)` to use in production, and rather just use a library's implementation as provided, I've found that understanding how it works under the covers actually helps solidify general FP concepts very well.
+虽然您可能永远不会实现自己的`compose(..)`以在生产中使用，而只是按照提供的方式使用库的实现，但我发现理解它在封面下的工作方式实际上有助于很好地巩固一般的fp概念。
 
-So let's examine some different implementation options for `compose(..)`. We'll also see there are some pros/cons to each implementation, especially performance.
+因此，让我们检查一下`compose(..)`的一些不同实现选项。我们还将看到每个实现都有一些优缺点，特别是性能。
 
-We'll be looking at the [`reduce(..)` utility in detail in Chapter 9](ch9.md/#reduce), but for now, just know that it reduces a list (array) to a single finite value. It's like a fancy loop.
+我们将在第9章中详细研究[`reduce(..)`](ch9.md/#reduce)，但现在只需知道它将一个列表（数组）缩减为一个有限值。就像一个奇特的环。
 
-For example, if you did an addition-reduction across a list of numbers (such as `[1,2,3,4,5,6]`), you'd loop over them adding them together as you go. The reduction would add `1` to `2`, and add that result to `3`, and then add that result to `4`, and so on, resulting in the final summation: `21`.
+例如，如果对一个数字列表（例如`[1,2,3,4,5,6]`）进行加法归约，则会在进行加法运算时循环它们。减法将把`1` 加到`2`，把结果加到`3`，然后把结果加到`4`，依此类推，最终得到`21`。
 
-The original version of `compose(..)` uses a loop and eagerly (aka, immediately) calculates the result of one call to pass into the next call. This is a reduction of a list of functions, so we can do that same thing with `reduce(..)`:
+`compose(..)`的原始版本使用循环并立即计算要传递给下一个调用的作为一个调用的参数。这是一个函数列表的缩减，所以我们可以用`reduce(..)`做同样的事情:
 
 <a name="composereduce"></a>
 
@@ -317,7 +317,7 @@ function compose(...fns) {
     };
 }
 
-// or the ES6 => form
+// ES6 箭头格式
 var compose = (...fns) =>
     result =>
         [...fns].reverse().reduce(
@@ -327,15 +327,15 @@ var compose = (...fns) =>
         );
 ```
 
-**Note:** This implementation of `compose(..)` uses `[...fns].reverse().reduce(..)` to reduce from right-to-left. We'll [revisit `compose(..)` in Chapter 9](ch9.md/#user-content-composereduceright), instead using `reduceRight(..)` for that purpose.
+**注意:**`compose(..)`的这个实现使用`[...fns].reverse().reduce(..)` 来从右到左减少。我们将在[第9章重温 `compose(..)`](ch9.md/#user-content-composereduceright)中使用`reduceRight(..)`代替。
 
-Notice that the `reduce(..)` looping happens each time the final `composed(..)` function is run, and that each intermediate `result(..)` is passed along to the next iteration as the input to the next call.
+注意，`reduce(..)` 循环在每次运行最终的`composed(..)`函数时发生，并且每个中间的 `result(..)` 作为下一个调用的输入传递给下一个迭代。
 
-The advantage of this implementation is that the code is more concise and also that it uses a well-known FP construct: `reduce(..)`. And the performance of this implementation is also similar to the original `for`-loop version.
+这种实现的优点是代码更加简洁，并且使用了一个众所周知的函数编程结构:`reduce(..)`。这个实现的性能也类似于最初的for循环版本。
 
-However, this implementation is limited in that the outer composed function (aka, the first function in the composition) can only receive a single argument. Most other implementations pass along all arguments to that first call. If every function in the composition is unary, this is no big deal. But if you need to pass multiple arguments to that first call, you'd want a different implementation.
+但是，这种实现受到限制，因为外部组合函数(也就是组合中的第一个函数)只能接收单个参数。大多数其他实现都将所有参数传递给第一个调用。如果合成中的每个函数都是一元的，这没什么大不了的。但是，如果需要向第一个调用传递多个参数，则需要不同的实现。
 
-To fix that first call single-argument limitation, we can still use `reduce(..)` but produce a lazy-evaluation function wrapping:
+为了修正第一次调用的单参数限制，我们仍然可以使用`reduce(..)`，但是会产生一个延迟计算函数包装:
 
 ```js
 function compose(...fns) {
@@ -346,7 +346,7 @@ function compose(...fns) {
     } );
 }
 
-// or the ES6 => form
+// ES6 箭头格式
 var compose =
     (...fns) =>
         fns.reverse().reduce( (fn1,fn2) =>
@@ -355,29 +355,29 @@ var compose =
         );
 ```
 
-Notice that we return the result of the `reduce(..)` call directly, which is itself a function, not a computed result. *That* function lets us pass in as many arguments as we want, passing them all down the line to the first function call in the composition, then bubbling up each result through each subsequent call.
+注意，我们直接返回`reduce(..)`调用的结果，它本身是一个函数，而不是一个计算结果。*那个*函数允许我们传入尽可能多的参数，将它们全部传递到组合中的第一个函数调用，然后在每个后续调用中弹出每个结果。
 
-Instead of calculating the running result and passing it along as the `reduce(..)` looping proceeds, this implementation runs the `reduce(..)` looping **once** up front at composition time, and defers all the function call calculations -- referred to as lazy calculation. Each partial result of the reduction is a successively more wrapped function.
+与计算运行结果并将其作为`reduce(..)`循环进行传递不同，此实现在组合时预先运行一次 `reduce(..)`循环，并延迟所有函数调用计算——称为延迟计算。还原的每个部分结果都是一个依次封装的函数。
 
-When you call the final composed function and provide one or more arguments, all the levels of the big nested function, from the inner most call to the outer, are executed in reverse succession (not via a loop).
+当您调用最终的组合函数并提供一个或多个参数时，大型嵌套函数的所有级别，从最内部的调用到最外部的调用，都是反向连续执行的(不是通过循环)。
 
-The performance characteristics will potentially be different than in the previous `reduce(..)`-based implementation. Here, `reduce(..)` only runs once to produce a big composed function, and then this composed function call simply executes all its nested functions each call. In the former version, `reduce(..)` would be run for every call.
+性能特征可能与以前基于 `reduce(..)`的实现不同。在这里， `reduce(..)`只运行一次，以生成一个大型复合函数，然后这个复合函数调用简单地执行它的所有嵌套函数的每个调用。在前一个版本中，每次调用都会运行`reduce(..)` 。
 
-Your mileage may vary on which implementation is better, but keep in mind that this latter implementation isn't limited in argument count the way the former one is.
+对于哪种实现更好，您的优势可能会有所不同，但是请记住，后一种实现并不像前一种实现那样在参数计数方面受到限制。
 
-We could also define `compose(..)` using recursion. The recursive definition for `compose(fn1,fn2, .. fnN)` would look like:
+我们还可以使用递归定义`compose(..)`。`compose(fn1,fn2, .. fnN)`看起来像:
 
 ```txt
 compose( compose(fn1,fn2, .. fnN-1), fnN );
 ```
 
-**Note:** We will cover recursion more fully in [Chapter 8](ch8.md), so if this approach seems confusing, don't worry for now. Or, go read that chapter then come back and re-read this note. :)
+**注意:**我们将在[第8章](ch8.md)中更全面地讨论递归，所以如果这种方法看起来令人困惑，现在不要担心。或者，去读那一章，然后回来再读这篇笔记。:)
 
-Here's how we implement `compose(..)` with recursion:
+下面是我们如何用递归实现`compose(..)`:
 
 ```js
 function compose(...fns) {
-    // pull off the last two arguments
+    // 完成最后两个参数
     var [ fn1, fn2, ...rest ] = fns.reverse();
 
     var composedFn = function composed(...args){
@@ -389,7 +389,7 @@ function compose(...fns) {
     return compose( ...rest.reverse(), composedFn );
 }
 
-// or the ES6 => form
+// ES6 箭头格式
 var compose =
     (...fns) => {
         // pull off the last two arguments
@@ -405,19 +405,19 @@ var compose =
     };
 ```
 
-I think the benefit of a recursive implementation is mostly conceptual. I personally find it much easier to think about a repetitive action in recursive terms instead of in a loop where I have to track the running result, so I prefer the code to express it that way.
+我认为递归实现的好处主要是概念性的。我个人发现，用递归的方式考虑重复操作要比在循环中跟踪运行的结果容易得多，所以我更喜欢代码以这种方式来表示它。
 
-Others will find the recursive approach quite a bit more daunting to mentally juggle. I invite you to make your own evaluations.
+另一些人对递归方法更加气馁，把握度会没有那么强。我希望你能做好判断。
 
-## Reordered Composition
+## 重新排序组成
 
-We talked earlier about the right-to-left ordering of standard `compose(..)` implementations. The advantage is in listing the arguments (functions) in the same order they'd appear if doing the composition manually.
+我们在前面讨论了标准的`compose(..)`实现了从右到左的顺序。这样做的好处是，以与手动组合时相同的顺序列出参数。
 
-The disadvantage is they're listed in the reverse order that they execute, which could be confusing. It was also more awkward to have to use `partialRight(compose, ..)` to pre-specify the *first* function(s) to execute in the composition.
+缺点是它们是以执行的相反顺序列出的，这可能会让人感到困惑。使用`partialRight(compose, ..)`来预先指定要在组合中执行*第一个*函数也更尴尬。
 
-The reverse ordering, composing from left-to-right, has a common name: `pipe(..)`. This name is said to come from Unix/Linux land, where multiple programs are strung together by "pipe"ing (`|` operator) the output of the first one in as the input of the second, and so on (i.e., `ls -la | grep "foo" | less`).
+相反的顺序，从左到右组合，有一个共同的名称:`pipe(..)`。这个名称据说来自Unix/Linux领域，其中多个程序通过(' | '操作符)将第一个的输出作为第二个的输入串在一起，以此类推(即， `ls -la | grep "foo" | less`)。
 
-`pipe(..)` is identical to `compose(..)` except it processes through the list of functions in left-to-right order:
+`pipe(..)`与`compose(..)`是相同的，只是它按照从左到右的顺序处理函数列表:
 
 ```js
 function pipe(...fns) {
@@ -425,8 +425,8 @@ function pipe(...fns) {
         var list = [...fns];
 
         while (list.length > 0) {
-            // take the first function from the list
-            // and execute it
+            // 从列表中获取第一个函数
+            // 然后执行
             result = list.shift()( result );
         }
 
@@ -435,7 +435,7 @@ function pipe(...fns) {
 }
 ```
 
-In fact, we could just define `pipe(..)` as the arguments-reversal of `compose(..)`:
+实际上，我们可以将`pipe(..)`定义为`compose(..)`的参数反转：
 
 ```js
 var pipe = reverseArgs( compose );
